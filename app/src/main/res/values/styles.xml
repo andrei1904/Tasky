@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/customButtonColor</item>
+    </style>
+
+    <style name="task_priority_selector_autocomplete" parent="Theme.MaterialComponents.Light">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="task_priority_slider" parent="Theme.MaterialComponents.Light"/>
+
+    <style name="task_title_text" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textStyle"> bold </item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="task_filter_chipGroup_style" parent="Theme.MaterialComponents.Light"/>
+
+</resources>

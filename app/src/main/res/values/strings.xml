@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Tasky</string>
+
+    <string name="sign_in_please">Sign in please</string>
+    <string name="sign_in">Sign in</string>
+    <string name="logout">Logout</string>
+    <string name="profile">Profile</string>
+    <string name="add_task">Add Task</string>
+    <string name="domain">Domain</string>
+    <string name="title">Title</string>
+    <string name="priority">Priority</string>
+    <string name="deadline_date">Deadline Date</string>
+    <string name="description">Description</string>
+    <string name="add">Add</string>
+    <string name="tasks">Tasks</string>
+    <string name="create">Create</string>
+    <string name="create_task">Create Task</string>
+    <string name="more_actions">More Actions</string>
+    <string name="edit_icon">Edit Icon</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="would_you_like_to_split_the_main_task_in_multiple_subtasks">Would you like to split the main task in multiple subtasks?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="task_details">Task details</string>
+    <string name="next">Next</string>
+</resources>
