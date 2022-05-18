@@ -48,8 +48,6 @@ class CreateTaskViewModel @Inject constructor(
 
     private val subtasks: ArrayList<Subtask> = arrayListOf()
 
-    private val currentSubtask = 0
-
     fun setTaskField(value: String, type: String) {
         when (type) {
             DOMAIN_VALUE -> {
@@ -138,6 +136,11 @@ class CreateTaskViewModel @Inject constructor(
         } else {
             completedFieldsForSubtasks[subtaskNumber].add(type)
         }
+    }
+
+    fun removeSubtask(subtaskNumber: Int) {
+        subtasks.removeAt(subtaskNumber)
+        completedFieldsForSubtasks.removeAt(subtaskNumber)
     }
 
     fun areSubtasksValid(): Boolean {

@@ -70,10 +70,10 @@ class CreateTaskFragment : BaseFragment<FragmentCreateTaskBinding>() {
     }
 
     private fun nextButtonClicked() {
-        if (!viewModel.isTaskValid()) {
-            validateOnNextCliked()
-            return
-        }
+//        if (!viewModel.isTaskValid()) {
+//            validateOnNextCliked()
+//            return
+//        }
 
         (activity as BaseActivity).getFragmentNavigation().replaceFragment(CreateSubtaskFragment())
     }
