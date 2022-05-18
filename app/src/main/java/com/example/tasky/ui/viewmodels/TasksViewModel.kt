@@ -22,23 +22,6 @@ class TasksViewModel @Inject constructor(
     private val deleteTaskResult: MutableLiveData<Resource<Boolean>> = MutableLiveData()
     private val disposables: CompositeDisposable = CompositeDisposable()
 
-    fun createTask(task: Task): MutableLiveData<Resource<Boolean>> {
-        disposables.add(
-            tasksRepository.createTask(task)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { result ->
-                        createTaskResult.postValue(Resource.success(true))
-                    },
-                    {
-                        createTaskResult.postValue(Resource.error(it.message.toString(), false))
-                    }
-                )
-        )
-        return createTaskResult;
-    }
-
     fun getAllTasks(): MutableLiveData<Resource<List<Task>>> {
         disposables.add(
             tasksRepository.getAllTasks()

@@ -37,4 +37,9 @@ class FragmentNavigation(activity: Activity) {
         }
         transaction.commit()
     }
+
+    fun popBackStack() {
+        (_activity as FragmentActivity).supportFragmentManager.popBackStack()
+    }
+
 }

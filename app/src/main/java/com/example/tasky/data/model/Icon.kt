@@ -10,7 +10,7 @@ data class Icon(
 
 enum class IconType {
     ADD_ICON,
-    CREATE_ICON,
+    CHECK_ICON,
     NEXT_ICON,
     BACK_ICON
 }

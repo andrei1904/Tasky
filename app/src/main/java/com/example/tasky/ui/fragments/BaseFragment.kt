@@ -39,12 +39,22 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     private fun initRightIcon() {
 
-        val icon = getRightIcon() ?: return
-        when (icon.type) {
-            IconType.ADD_ICON -> initIcon(icon, topBarBinding.imageButtonAdd)
-            IconType.CREATE_ICON -> initIcon(icon, topBarBinding.imageButtonCreate)
-            IconType.NEXT_ICON -> initIcon(icon, topBarBinding.imageButtonNext)
+        val icons = getRightIcons()
+        for (icon in icons) {
+            if (icon == null) {
+                return
+            }
+
+            when (icon.type) {
+                IconType.ADD_ICON -> initIcon(icon, topBarBinding.imageButtonAdd)
+                IconType.CHECK_ICON -> initIcon(icon, topBarBinding.imageButtonCreate)
+                IconType.NEXT_ICON -> initIcon(icon, topBarBinding.imageButtonNext)
+            }
         }
+    }
+
+    protected fun rightIconsChanged() {
+        initRightIcon()
     }
 
     private fun initLeftIcon() {
@@ -71,7 +81,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
     abstract fun onCreateViewBinding(inflater: LayoutInflater, container: ViewGroup?)
 
-    abstract fun getRightIcon(): Icon?
+    abstract fun getRightIcons(): List<Icon?>
 
     abstract fun getLeftIcon(): Icon?
 

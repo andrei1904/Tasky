@@ -9,6 +9,6 @@ data class TaskWithSubtasks(
         parentColumn = "taskId",
         entityColumn = "mainTaskId"
     )
-    val subtasks: List<SubTask>
+    val subtasks: List<Subtask>
 ) {
 }

@@ -44,14 +44,14 @@ class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.DeleteT
         return getString(R.string.tasks)
     }
 
-    override fun getRightIcon(): Icon {
-        return Icon(
-                IconType.ADD_ICON,
-                {
-                    (activity as BaseActivity).getFragmentNavigation()
-                        .replaceFragment(CreateTaskFragment())
-                }
-            )
+    override fun getRightIcons(): List<Icon> {
+        return listOf(Icon(
+            IconType.ADD_ICON,
+            {
+                (activity as BaseActivity).getFragmentNavigation()
+                    .replaceFragment(CreateTaskFragment())
+            }
+        ))
     }
 
     override fun getLeftIcon(): Icon? {
