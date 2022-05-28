@@ -3,6 +3,7 @@ package com.example.tasky.ui.repositories
 import com.example.tasky.data.local.AppDatabase
 import com.example.tasky.data.model.Subtask
 import com.example.tasky.data.model.Task
+import com.example.tasky.data.model.TaskWithSubtasks
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
@@ -11,6 +12,10 @@ class TasksRepository @Inject constructor(
 ) {
     fun getAllTasks(): Single<List<Task>> {
         return appDatabase.TaskDao().getAll()
+    }
+
+    fun getAllTasksWithSubtasks(): Single<List<TaskWithSubtasks>> {
+        return appDatabase.TaskDao().getAllTasksWithSubtasks()
     }
 
     fun deleteTaskById(id: Long): Single<Int> {

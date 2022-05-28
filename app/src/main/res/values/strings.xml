@@ -28,4 +28,12 @@
     <string name="show_hide">Show Hide</string>
     <string name="subtask">Subtask:</string>
     <string name="would_you_like_to_self_impose_a_deadline_on_this_task">Would you like to self impose a deadline on this task?</string>
+    <string name="task_progress_text">%1$d completed subtasks of %2$d</string>
+    <string name="sign_up">Sign up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="create_a_new_account">Create a new account</string>
+    <string name="create_account">Create account</string>
+    <string name="enter_your_details">Enter your details</string>
+    <string name="a_time_management_app_for_productivity">A time management app for productivity</string>
 </resources>

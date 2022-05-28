@@ -1,27 +1,26 @@
 package com.example.tasky.ui.viewmodels
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.tasky.data.model.Account
 import com.example.tasky.ui.repositories.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Single
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+class SignupViewModel @Inject constructor(
     private val loginRepository: LoginRepository
 ) : ViewModel() {
 
     val values = Companion
 
-    private val _userLoggedIn: MutableLiveData<Boolean> = MutableLiveData(false)
-
     private val account = Account()
 
-    private val completedFieldsForLogin: MutableSet<String> = mutableSetOf()
+    private val completedFields: MutableSet<String> = mutableSetOf()
+
+    fun onSignup() : Single<Boolean> {
+        return loginRepository.signUp(account)
+    }
 
     fun setLoginField(value: String, type: String) {
         when (type) {
@@ -34,40 +33,21 @@ class LoginViewModel @Inject constructor(
         }
 
         if (value.isEmpty()) {
-            completedFieldsForLogin.remove(type)
+            completedFields.remove(type)
         } else {
-            completedFieldsForLogin.add(type)
+            completedFields.add(type)
         }
     }
 
-    fun isLoginValid(): Boolean {
-        if (completedFieldsForLogin.size == NUMBER_OF_FIELDS) {
+    fun isAccountValid(): Boolean {
+        if (completedFields.size == NUMBER_OF_FIELDS) {
             return true
         }
         return false
     }
 
-    fun getLoginCompletedFields() : MutableSet<String> {
-        return completedFieldsForLogin
-    }
-
-    fun onLogin() : Single<Boolean> {
-        return loginRepository.signIn(account);
-    }
-
-
-    fun isUserLoggedIn(): MutableLiveData<Boolean> {
-        viewModelScope.launch {
-            _userLoggedIn.value = loginRepository.isLoggedIn()
-        }
-
-        return _userLoggedIn;
-    }
-
-    fun onSignOut() {
-        viewModelScope.launch {
-            loginRepository.signOut()
-        }
+    fun getCompletedFields(): MutableSet<String> {
+        return completedFields
     }
 
     companion object {

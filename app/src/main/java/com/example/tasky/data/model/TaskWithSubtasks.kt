@@ -11,4 +11,14 @@ data class TaskWithSubtasks(
     )
     val subtasks: List<Subtask>
 ) {
+
+    fun getNumberOfCompletedSubtasks(): Long {
+        return subtasks.stream()
+            .filter { subtask -> subtask.isCompleted }
+            .count()
+    }
+
+    fun getNumberOfSubtasks(): Int {
+        return subtasks.size
+    }
 }

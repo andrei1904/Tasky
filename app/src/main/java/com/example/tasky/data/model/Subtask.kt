@@ -10,6 +10,7 @@ data class Subtask(
     var subtaskId: Long = 0,
     var title: String = "",
     var description: String = "",
+    var isCompleted: Boolean = false,
     var mainTaskId: Long = subtaskId
 ) {
 }

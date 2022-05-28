@@ -14,6 +14,9 @@ interface TaskDao {
     fun getAll() : Single<List<Task>>
 
     @Query("SELECT * FROM task")
+    fun getAllTasksWithSubtasks() : Single<List<TaskWithSubtasks>>
+
+    @Query("SELECT * FROM task")
     fun getAllWithSubtasks() : List<TaskWithSubtasks>
 
     @Query("DELETE FROM task WHERE taskId = :id")

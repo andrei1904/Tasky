@@ -1,7 +1,6 @@
 package com.example.tasky.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tasky.R
 import com.example.tasky.data.model.Icon
 import com.example.tasky.data.model.IconType
-import com.example.tasky.data.model.Resource
+import com.example.tasky.data.model.TaskWithSubtasks
 import com.example.tasky.data.model.enums.Status
-import com.example.tasky.databinding.FragmentCreateTaskBinding
 import com.example.tasky.databinding.FragmentTasksBinding
 import com.example.tasky.ui.activites.BaseActivity
 import com.example.tasky.ui.adapter.TasksAdapter
@@ -23,7 +21,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 @AndroidEntryPoint
-class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.DeleteTaskClickListener {
+class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.TaskClickListener {
 
     private lateinit var tasksAdapter: TasksAdapter
 
@@ -65,13 +63,14 @@ class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.DeleteT
         initRecyclerView()
 
 
-        viewModel.getAllTasks().observe(viewLifecycleOwner) { result ->
+        viewModel.getAll().observe(viewLifecycleOwner) { result ->
             if (result.status == Status.SUCCESS) {
                 result.data?.let { tasksAdapter.setTasksList(it) }
             } else {
                 Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
     private fun initRecyclerView() {
@@ -104,5 +103,9 @@ class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.DeleteT
                     Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show()
                 }
             )
+    }
+
+    override fun onTaskClicked(taskWithSubtasks: TaskWithSubtasks) {
+        (activity as BaseActivity).getFragmentNavigation().replaceFragment(TaskFragment(taskWithSubtasks))
     }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tasky.data.model.Resource
 import com.example.tasky.data.model.Task
+import com.example.tasky.data.model.TaskWithSubtasks
 import com.example.tasky.ui.repositories.TasksRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -22,6 +23,8 @@ class TasksViewModel @Inject constructor(
     private val deleteTaskResult: MutableLiveData<Resource<Boolean>> = MutableLiveData()
     private val disposables: CompositeDisposable = CompositeDisposable()
 
+    private val allTasksWithSubtasks: MutableLiveData<Resource<List<TaskWithSubtasks>>> = MutableLiveData()
+
     fun getAllTasks(): MutableLiveData<Resource<List<Task>>> {
         disposables.add(
             tasksRepository.getAllTasks()
@@ -37,6 +40,23 @@ class TasksViewModel @Inject constructor(
                 )
         )
         return allTasks
+    }
+
+    fun getAll(): MutableLiveData<Resource<List<TaskWithSubtasks>>> {
+        disposables.add(
+            tasksRepository.getAllTasksWithSubtasks()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { result ->
+                        allTasksWithSubtasks.postValue(Resource.success(result))
+                    },
+                    {
+                        allTasksWithSubtasks.postValue(Resource.error(it.message.toString(), null))
+                    }
+                )
+        )
+        return allTasksWithSubtasks
     }
 
     fun deleteTaskId(id: Long): Single<Int> {

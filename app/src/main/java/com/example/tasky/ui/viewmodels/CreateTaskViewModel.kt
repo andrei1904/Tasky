@@ -24,20 +24,6 @@ class CreateTaskViewModel @Inject constructor(
     private val tasksRepository: TasksRepository
 ) : ViewModel() {
 
-    companion object {
-        const val DOMAIN_VALUE = "domain"
-        const val TITLE_VALUE = "title"
-        const val DEADLINE_VALUE = "deadline"
-        const val PRIORITY_VALUE = "priority"
-        const val DESCRIPTION_VALUE = "description"
-        val ALL_TASK_FIELDS =
-            listOf(DOMAIN_VALUE, TITLE_VALUE, DEADLINE_VALUE, PRIORITY_VALUE, DESCRIPTION_VALUE)
-        val ALL_SUBTASK_FIELDS = listOf(TITLE_VALUE, DESCRIPTION_VALUE)
-        private const val NUMBER_OF_FIELDS_FOR_TASK = 5
-        private const val NUMBER_OF_FIELDS_FOR_SUBTASK = 2
-        const val DATE_TIME_FORMAT = "dd MMM yyyy hh:mm"
-    }
-
     val values = Companion
 
     private val completedFieldsForTask: MutableSet<String> = mutableSetOf()
@@ -57,11 +43,11 @@ class CreateTaskViewModel @Inject constructor(
                 task.title = value
             }
             PRIORITY_VALUE -> {
-                task.priority = Priority.valueOf(value.uppercase(Locale.getDefault()))
+                task.priority = Priority.valueOf(value.uppercase(Locale.ENGLISH))
             }
             DEADLINE_VALUE -> {
                 val date: Date? =
-                    SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault()).parse(value)
+                    SimpleDateFormat(DATE_TIME_FORMAT, Locale.ENGLISH).parse(value)
                 if (date != null) {
                     task.deadline = date.time
                 }
@@ -158,9 +144,23 @@ class CreateTaskViewModel @Inject constructor(
 
     fun setImposedDeadlineField(value: String) {
         val date: Date? =
-            SimpleDateFormat(CalendarManager.DATE_TIME_FORMAT, Locale.getDefault()).parse(value)
+            SimpleDateFormat(CalendarManager.DATE_TIME_FORMAT, Locale.ENGLISH).parse(value)
         if (date != null) {
             task.imposedDeadline = date.time
         }
+    }
+
+    companion object {
+        const val DOMAIN_VALUE = "domain"
+        const val TITLE_VALUE = "title"
+        const val DEADLINE_VALUE = "deadline"
+        const val PRIORITY_VALUE = "priority"
+        const val DESCRIPTION_VALUE = "description"
+        val ALL_TASK_FIELDS =
+            listOf(DOMAIN_VALUE, TITLE_VALUE, DEADLINE_VALUE, PRIORITY_VALUE, DESCRIPTION_VALUE)
+        val ALL_SUBTASK_FIELDS = listOf(TITLE_VALUE, DESCRIPTION_VALUE)
+        private const val NUMBER_OF_FIELDS_FOR_TASK = 5
+        private const val NUMBER_OF_FIELDS_FOR_SUBTASK = 2
+        const val DATE_TIME_FORMAT = "dd MMM yyyy hh:mm"
     }
 }

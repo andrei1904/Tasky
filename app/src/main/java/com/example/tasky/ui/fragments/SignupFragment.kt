@@ -9,30 +9,30 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.example.tasky.databinding.FragmentLoginBinding
-import com.example.tasky.ui.activites.BaseActivity
+import com.example.tasky.databinding.FragmentSigupBinding
 import com.example.tasky.ui.activites.MainActivity
 import com.example.tasky.ui.viewmodels.LoginViewModel
+import com.example.tasky.ui.viewmodels.SignupViewModel
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
+class SignupFragment : Fragment() {
 
-    private var _binding: FragmentLoginBinding? = null
+    private var _binding: FragmentSigupBinding? = null
 
     private val binding get() = _binding!!
 
-    private val viewModel by viewModels<LoginViewModel>()
+    private val viewModel by viewModels<SignupViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentSigupBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -42,22 +42,18 @@ class LoginFragment : Fragment() {
 
         addValidationListeners()
 
-        binding.buttonSingIn.setOnClickListener {
-            loginButtonClicked()
-        }
-
-        binding.buttonSingUp.setOnClickListener {
-            (activity as BaseActivity).getFragmentNavigation().replaceFragment(SignupFragment())
+        binding.buttonCreateAccount.setOnClickListener {
+            createAccountClicked()
         }
     }
 
-    private fun loginButtonClicked() {
-        if (!viewModel.isLoginValid()) {
-            validateOnLoginClicked()
+    private fun createAccountClicked() {
+        if (!viewModel.isAccountValid()) {
+            validateOnCreateClicked()
             return
         }
 
-        viewModel.onLogin()
+        viewModel.onSignup()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -67,16 +63,16 @@ class LoginFragment : Fragment() {
                         startActivity(intent)
                     }
                 },
-                {
-                    Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show()
+                { throwable ->
+                    Toast.makeText(context, throwable.message, Toast.LENGTH_SHORT).show()
                 }
             )
     }
 
-    private fun validateOnLoginClicked() {
+    private fun validateOnCreateClicked() {
         var isValid: Boolean
         for (field in viewModel.values.ALL_FIELDS) {
-            isValid = viewModel.getLoginCompletedFields().contains(field)
+            isValid = viewModel.getCompletedFields().contains(field)
 
             when (field) {
                 LoginViewModel.EMAIL_VALUE -> {
@@ -88,6 +84,10 @@ class LoginFragment : Fragment() {
             }
         }
     }
+    private fun addValidationListeners() {
+        addValidationListener(binding.textInputLayoutEmail, viewModel.values.EMAIL_VALUE)
+        addValidationListener(binding.textInputLayoutPassword, viewModel.values.PASSWORD_VALUE)
+    }
 
     private fun setValidationError(textInputLayout: TextInputLayout, isValid: Boolean) {
         if (isValid) {
@@ -95,11 +95,6 @@ class LoginFragment : Fragment() {
         } else {
             textInputLayout.error = "Add " + textInputLayout.hint
         }
-    }
-
-    private fun addValidationListeners() {
-        addValidationListener(binding.textInputLayoutEmail, viewModel.values.EMAIL_VALUE)
-        addValidationListener(binding.textInputLayoutPassword, viewModel.values.PASSWORD_VALUE)
     }
 
     private fun addValidationListener(textInputLayout: TextInputLayout, field: String) {
@@ -115,14 +110,5 @@ class LoginFragment : Fragment() {
             }
             viewModel.setLoginField(value, field)
         }
-    }
-
-    fun onBackPressed() {
-        activity?.finish()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

@@ -53,10 +53,11 @@ class CalendarManager {
         ).show()
     }
 
-    private fun getDateTimeFromMillis(millis: Long, formatter: SimpleDateFormat): String {
+    fun getDateTimeFromMillis(millis: Long, formatter: SimpleDateFormat): String {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = millis
 
         return formatter.format(calendar.time)
     }
+
 }
