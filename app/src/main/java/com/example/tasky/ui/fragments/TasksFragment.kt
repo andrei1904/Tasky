@@ -8,9 +8,9 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tasky.R
-import com.example.tasky.data.model.Icon
-import com.example.tasky.data.model.IconType
-import com.example.tasky.data.model.TaskWithSubtasks
+import com.example.tasky.data.model.entities.Icon
+import com.example.tasky.data.model.entities.IconType
+import com.example.tasky.data.model.entities.TaskWithSubtasks
 import com.example.tasky.data.model.enums.Status
 import com.example.tasky.databinding.FragmentTasksBinding
 import com.example.tasky.ui.activites.BaseActivity

@@ -4,13 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.tasky.data.model.Icon
-import com.example.tasky.data.model.IconType
-import com.example.tasky.data.model.TaskWithSubtasks
+import com.example.tasky.data.model.entities.Icon
+import com.example.tasky.data.model.entities.IconType
+import com.example.tasky.data.model.entities.TaskWithSubtasks
 import com.example.tasky.databinding.FragmentTaskBinding
-import com.example.tasky.databinding.FragmentTasksBinding
 import com.example.tasky.ui.activites.BaseActivity
 import com.example.tasky.ui.adapter.TaskSubtasksAdapter
 import dagger.hilt.android.AndroidEntryPoint

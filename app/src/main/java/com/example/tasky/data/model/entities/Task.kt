@@ -1,4 +1,4 @@
-package com.example.tasky.data.model
+package com.example.tasky.data.model.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

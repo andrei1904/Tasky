@@ -1,4 +1,4 @@
-package com.example.tasky.data.model
+package com.example.tasky.data.model.entities
 
 import com.example.tasky.data.model.enums.Status
 

@@ -41,4 +41,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 }

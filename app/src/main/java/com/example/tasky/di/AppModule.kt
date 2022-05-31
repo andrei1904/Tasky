@@ -1,11 +1,12 @@
-package com.example.tasky.data.di
+package com.example.tasky.di
 
+import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import androidx.room.Room
-import androidx.room.RoomDatabase
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.tasky.data.local.AppDatabase
-import com.google.firebase.FirebaseApp
+import com.example.tasky.utils.preferences.PreferenceHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -18,7 +19,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class AppModule {
+class AppModule() {
 
     @Provides
     @Singleton
@@ -33,4 +34,19 @@ class AppModule {
     fun provideFirebaseAuth(@ApplicationContext context: Context): FirebaseAuth {
         return Firebase.auth
     }
+
+    @Provides
+    @Singleton
+    fun providePreferenceHelper(@ApplicationContext applicationContext: Context): PreferenceHelper {
+        return PreferenceHelper(applicationContext)
+    }
+//
+//    @Provides
+//    @Singleton
+//    fun provideSharedPreferences(@ApplicationContext applicationContext: Context):
+//            SharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+
+//    @Provides
+//    @Singleton
+//    fun provideAppContext(app: Application): Context = app.applicationContext
 }

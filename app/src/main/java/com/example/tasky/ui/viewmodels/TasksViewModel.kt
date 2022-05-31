@@ -2,10 +2,10 @@ package com.example.tasky.ui.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.tasky.data.model.Resource
-import com.example.tasky.data.model.Task
-import com.example.tasky.data.model.TaskWithSubtasks
-import com.example.tasky.ui.repositories.TasksRepository
+import com.example.tasky.data.model.entities.Resource
+import com.example.tasky.data.model.entities.Task
+import com.example.tasky.data.model.entities.TaskWithSubtasks
+import com.example.tasky.data.repositories.TasksRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single

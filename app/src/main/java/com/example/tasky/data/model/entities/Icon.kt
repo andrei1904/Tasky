@@ -1,4 +1,4 @@
-package com.example.tasky.data.model
+package com.example.tasky.data.model.entities
 
 import android.view.View
 
@@ -12,5 +12,6 @@ enum class IconType {
     ADD_ICON,
     CHECK_ICON,
     NEXT_ICON,
-    BACK_ICON
+    BACK_ICON,
+    EDIT_ICON
 }

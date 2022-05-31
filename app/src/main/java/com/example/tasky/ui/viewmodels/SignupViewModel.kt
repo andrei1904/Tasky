@@ -1,11 +1,12 @@
 package com.example.tasky.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.example.tasky.data.model.Account
-import com.example.tasky.ui.repositories.LoginRepository
+import com.example.tasky.data.model.entities.Account
+import com.example.tasky.data.repositories.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
+import kotlin.math.log
 
 @HiltViewModel
 class SignupViewModel @Inject constructor(
@@ -22,10 +23,18 @@ class SignupViewModel @Inject constructor(
         return loginRepository.signUp(account)
     }
 
+    fun createUser(): Single<Boolean> {
+        return loginRepository.createUser(account)
+    }
+
+    fun login(): Single<Boolean> {
+        return loginRepository.login(account)
+    }
+
     fun setLoginField(value: String, type: String) {
         when (type) {
             EMAIL_VALUE -> {
-                account.email = value
+                account.username = value
             }
             PASSWORD_VALUE -> {
                 account.password = value

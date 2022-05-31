@@ -3,12 +3,13 @@ package com.example.tasky.ui.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tasky.data.model.Account
-import com.example.tasky.ui.repositories.LoginRepository
+import com.example.tasky.data.model.entities.Account
+import com.example.tasky.data.repositories.LoginRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.log
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -26,7 +27,7 @@ class LoginViewModel @Inject constructor(
     fun setLoginField(value: String, type: String) {
         when (type) {
             EMAIL_VALUE -> {
-                account.email = value
+                account.username = value
             }
             PASSWORD_VALUE -> {
                 account.password = value
@@ -55,6 +56,9 @@ class LoginViewModel @Inject constructor(
         return loginRepository.signIn(account);
     }
 
+    fun login(): Single<Boolean> {
+        return loginRepository.login(account)
+    }
 
     fun isUserLoggedIn(): MutableLiveData<Boolean> {
         viewModelScope.launch {

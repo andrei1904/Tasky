@@ -36,4 +36,8 @@
     <string name="create_account">Create account</string>
     <string name="enter_your_details">Enter your details</string>
     <string name="a_time_management_app_for_productivity">A time management app for productivity</string>
+    <string name="welcome">Welcome</string>
+    <string name="edit_deatils">Edit deatils</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last Name</string>
 </resources>

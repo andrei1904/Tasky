@@ -6,12 +6,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
-import com.example.tasky.data.model.Icon
-import com.example.tasky.data.model.IconType
+import com.example.tasky.data.model.entities.Icon
+import com.example.tasky.data.model.entities.IconType
 import com.example.tasky.databinding.FragmentCreateTaskSelfDeadlineBinding
 import com.example.tasky.ui.activites.BaseActivity
 import com.example.tasky.ui.viewmodels.CreateTaskViewModel

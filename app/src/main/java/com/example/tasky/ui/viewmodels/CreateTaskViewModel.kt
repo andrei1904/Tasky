@@ -1,17 +1,12 @@
 package com.example.tasky.ui.viewmodels
 
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import com.example.tasky.data.model.Subtask
-import com.example.tasky.data.model.Task
-import com.example.tasky.data.model.TaskWithSubtasks
+import com.example.tasky.data.model.entities.Subtask
+import com.example.tasky.data.model.entities.Task
 import com.example.tasky.data.model.enums.Priority
-import com.example.tasky.ui.repositories.TasksRepository
+import com.example.tasky.data.repositories.TasksRepository
 import com.example.tasky.utils.CalendarManager
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Scheduler
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.text.SimpleDateFormat

@@ -5,9 +5,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tasky.R
-import com.example.tasky.data.model.Subtask
-import com.example.tasky.data.model.Task
-import com.example.tasky.data.model.TaskWithSubtasks
+import com.example.tasky.data.model.entities.Subtask
+import com.example.tasky.data.model.entities.Task
+import com.example.tasky.data.model.entities.TaskWithSubtasks
 import com.example.tasky.databinding.ItemSubtaskBinding
 import com.example.tasky.databinding.ItemTaskMoreBinding
 

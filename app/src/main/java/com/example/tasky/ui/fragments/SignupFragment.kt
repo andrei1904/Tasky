@@ -53,7 +53,23 @@ class SignupFragment : Fragment() {
             return
         }
 
-        viewModel.onSignup()
+        viewModel.createUser()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { result ->
+                    if (result == true) {
+                        loginUser()
+                    }
+                },
+                { throwable ->
+                    Toast.makeText(context, throwable.message, Toast.LENGTH_SHORT).show()
+                }
+            )
+    }
+
+    private fun loginUser() {
+        viewModel.login()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -84,6 +100,7 @@ class SignupFragment : Fragment() {
             }
         }
     }
+
     private fun addValidationListeners() {
         addValidationListener(binding.textInputLayoutEmail, viewModel.values.EMAIL_VALUE)
         addValidationListener(binding.textInputLayoutPassword, viewModel.values.PASSWORD_VALUE)

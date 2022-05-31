@@ -1,31 +1,28 @@
 package com.example.tasky.ui.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.tasky.data.model.entities.Icon
 import com.example.tasky.data.model.entities.IconType
-import com.example.tasky.databinding.FragmnetProfileBinding
+import com.example.tasky.databinding.FragmentEditUserDetailsBinding
 import com.example.tasky.ui.activites.BaseActivity
-import com.example.tasky.ui.activites.LoginActivity
-import com.example.tasky.ui.viewmodels.LoginViewModel
 import com.example.tasky.ui.viewmodels.ProfileViewModel
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
 @AndroidEntryPoint
-class ProfileFragment : BaseFragment<FragmnetProfileBinding>() {
+class EditUserDetailsFragment : ValidatorFragment<FragmentEditUserDetailsBinding>() {
 
     private val viewModel by viewModels<ProfileViewModel>()
 
     override fun onCreateViewBinding(inflater: LayoutInflater, container: ViewGroup?) {
-        viewBinding = FragmnetProfileBinding.inflate(inflater, container, false)
+        viewBinding = FragmentEditUserDetailsBinding.inflate(inflater, container, false)
 
         if (rootView == null) {
             rootView = viewBinding!!.root
@@ -37,65 +34,51 @@ class ProfileFragment : BaseFragment<FragmnetProfileBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         if (isFirstLoaded) {
-            initButton()
-            loadUserDetails()
+            addValidationListeners()
         }
     }
-
 
     override fun getRightIcons(): List<Icon?> {
         return listOf(
             Icon(
-                IconType.EDIT_ICON,
+                IconType.CHECK_ICON,
                 {
-                    onEditClicked()
+                    validateOnCheckClicked()
                 }
             )
         )
     }
 
-    override fun getLeftIcon(): Icon? {
-        return null
+    override fun getLeftIcon(): Icon {
+        return Icon(
+            IconType.BACK_ICON,
+            {
+                (activity as BaseActivity).getFragmentNavigation().popBackStack()
+            }
+        )
     }
 
     override fun getTitle(): String {
-        return "My Profile"
+        return "Edit details"
     }
 
-    private fun initButton() {
-        binding.buttonLogout.setOnClickListener {
-            viewModel.logout()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { result ->
-                        if (result) {
-                            val intent = Intent(activity, LoginActivity::class.java)
-                            startActivity(intent)
-                            activity?.finish()
-                        }
-                    }, { throwable ->
-                        throwable.message?.let { safeThrowable ->
-                            Log.e(
-                                EditUserDetailsFragment::class.java.canonicalName,
-                                safeThrowable
-                            )
-                        }
-                    })
+
+    private fun validateOnCheckClicked() {
+        if (!viewModel.isValid()) {
+            validate(viewModel.values.ALL_FIELDS, viewModel.getCompletedFields())
+            return
         }
-    }
 
-    private fun loadUserDetails() {
-        viewModel.getUser()
+        viewModel.updateUser()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { result ->
-
-                    binding.textUserName.text = result.firstName + " " + result.lastName
-
+                    if (result == true) {
+                        (activity as BaseActivity).getFragmentNavigation()
+                            .replaceFragment(ProfileFragment())
+                    }
                 }, { throwable ->
                     throwable.message?.let { safeThrowable ->
                         Log.e(
@@ -106,8 +89,19 @@ class ProfileFragment : BaseFragment<FragmnetProfileBinding>() {
                 })
     }
 
-    private fun onEditClicked() {
-        (activity as BaseActivity).getFragmentNavigation()
-            .replaceFragment(EditUserDetailsFragment())
+    override fun getTextInputsMap(): Map<String, TextInputLayout> {
+        val map = HashMap<String, TextInputLayout>()
+
+        map[viewModel.values.FIRST_NAME] = binding.textInputFirstName
+        map[viewModel.values.LAST_NAME] = binding.textInputLastName
+
+        return map
+    }
+
+    private fun addValidationListeners() {
+        addValidationListener(binding.textInputLastName, viewModel.values.LAST_NAME)
+        { x: String, y: String -> viewModel.setUserFields(x, y) }
+        addValidationListener(binding.textInputFirstName, viewModel.values.FIRST_NAME)
+        { x: String, y: String -> viewModel.setUserFields(x, y) }
     }
 }

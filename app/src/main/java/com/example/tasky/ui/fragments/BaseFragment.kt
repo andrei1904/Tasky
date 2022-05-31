@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.example.tasky.data.model.Icon
-import com.example.tasky.data.model.IconType
+import com.example.tasky.data.model.entities.Icon
+import com.example.tasky.data.model.entities.IconType
 import com.example.tasky.databinding.ViewTopBarBinding
+import com.google.android.material.textfield.TextInputLayout
 
 abstract class BaseFragment<VB : ViewBinding> : Fragment() {
 
@@ -49,6 +50,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
                 IconType.ADD_ICON -> initIcon(icon, topBarBinding.imageButtonAdd)
                 IconType.CHECK_ICON -> initIcon(icon, topBarBinding.imageButtonCreate)
                 IconType.NEXT_ICON -> initIcon(icon, topBarBinding.imageButtonNext)
+                IconType.EDIT_ICON -> initIcon(icon, topBarBinding.imageButtonEdit)
             }
         }
     }

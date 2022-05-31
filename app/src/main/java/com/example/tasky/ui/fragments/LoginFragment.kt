@@ -57,7 +57,7 @@ class LoginFragment : Fragment() {
             return
         }
 
-        viewModel.onLogin()
+        viewModel.login()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -67,8 +67,8 @@ class LoginFragment : Fragment() {
                         startActivity(intent)
                     }
                 },
-                {
-                    Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show()
+                { throwable ->
+                    Toast.makeText(context, throwable.message, Toast.LENGTH_SHORT).show()
                 }
             )
     }

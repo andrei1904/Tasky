@@ -1,7 +1,6 @@
 package com.example.tasky.ui.adapter
 
 import android.content.Context
-import android.content.res.Resources
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tasky.R
-import com.example.tasky.data.model.TaskWithSubtasks
+import com.example.tasky.data.model.entities.TaskWithSubtasks
 import com.example.tasky.databinding.ItemTaskBinding
 import com.example.tasky.utils.DateFormater
 import com.google.android.material.bottomsheet.BottomSheetDialog

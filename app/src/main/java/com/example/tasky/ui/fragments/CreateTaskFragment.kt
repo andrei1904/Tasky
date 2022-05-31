@@ -10,8 +10,8 @@ import android.widget.AutoCompleteTextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import com.example.tasky.R
-import com.example.tasky.data.model.Icon
-import com.example.tasky.data.model.IconType
+import com.example.tasky.data.model.entities.Icon
+import com.example.tasky.data.model.entities.IconType
 import com.example.tasky.data.model.enums.Priority
 import com.example.tasky.databinding.FragmentCreateTaskBinding
 import com.example.tasky.ui.activites.BaseActivity
