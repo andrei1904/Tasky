@@ -2,7 +2,6 @@ package com.example.tasky.data.model.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.tasky.data.model.enums.Priority
 
 @Entity(tableName = "subtask")
 data class Subtask(
@@ -12,5 +11,4 @@ data class Subtask(
     var description: String = "",
     var isCompleted: Boolean = false,
     var mainTaskId: Long = subtaskId
-) {
-}
+)

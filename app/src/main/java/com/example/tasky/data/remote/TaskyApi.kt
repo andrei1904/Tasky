@@ -1,7 +1,9 @@
 package com.example.tasky.data.remote
 
 import com.example.tasky.data.model.entities.Account
+import com.example.tasky.data.model.entities.Task
 import com.example.tasky.data.model.entities.UserDetails
+import com.example.tasky.data.model.entities.UserWIthTasks
 import com.example.tasky.data.model.responses.CreateUserResponse
 import com.example.tasky.data.model.responses.LoginResponse
 import com.example.tasky.di.NetworkModule
@@ -27,4 +29,10 @@ interface TaskyApi {
 
     @POST(NetworkModule.LOGOUT)
     fun logout(): Call<Boolean>
+
+    @GET(NetworkModule.GET_USER_TASKS)
+    fun getUserWithTasks(@Path("id") id: Long): Call<UserWIthTasks>
+
+    @POST(NetworkModule.ADD_TASK)
+    fun addTask(@Path("id") id: Long, @Body task: Task)
 }

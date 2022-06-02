@@ -11,7 +11,6 @@ import com.example.tasky.R
 import com.example.tasky.data.model.entities.Icon
 import com.example.tasky.data.model.entities.IconType
 import com.example.tasky.data.model.entities.TaskWithSubtasks
-import com.example.tasky.data.model.enums.Status
 import com.example.tasky.databinding.FragmentTasksBinding
 import com.example.tasky.ui.activites.BaseActivity
 import com.example.tasky.ui.adapter.TasksAdapter
@@ -61,22 +60,34 @@ class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.TaskCli
 
         tasksAdapter = TasksAdapter(this)
         initRecyclerView()
-
-
-        viewModel.getAll().observe(viewLifecycleOwner) { result ->
-            if (result.status == Status.SUCCESS) {
-                result.data?.let { tasksAdapter.setTasksList(it) }
-            } else {
-                Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show()
-            }
-        }
-
+        loadData()
     }
 
     private fun initRecyclerView() {
         val recyclerView = binding.tasksRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = tasksAdapter
+    }
+
+    private fun loadData() {
+        viewModel.getAllTasks()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { result ->
+                    tasksAdapter.setTasksList(result.tasks)
+                },
+                { throwbale ->
+                    Toast.makeText(context, throwbale.message, Toast.LENGTH_SHORT).show()
+                }
+            )
+
+//            .observe(viewLifecycleOwner) { result ->
+//            if (result.status == Status.SUCCESS) {
+//                result.data?.let { tasksAdapter.setTasksList(it) }
+//            } else {
+//                Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show()
+//            }
     }
 
     override fun onDeleteClicked(taskId: Long, position: Int) {
@@ -106,6 +117,7 @@ class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.TaskCli
     }
 
     override fun onTaskClicked(taskWithSubtasks: TaskWithSubtasks) {
-        (activity as BaseActivity).getFragmentNavigation().replaceFragment(TaskFragment(taskWithSubtasks))
+        (activity as BaseActivity).getFragmentNavigation()
+            .replaceFragment(TaskFragment(taskWithSubtasks))
     }
 }

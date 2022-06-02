@@ -1,6 +1,7 @@
 package com.example.tasky.data.repositories
 
 import com.example.tasky.data.model.entities.Account
+import com.example.tasky.data.model.entities.UserWIthTasks
 import com.example.tasky.data.remote.TaskyApi
 import com.example.tasky.utils.preferences.PreferenceHelper
 import com.google.firebase.auth.FirebaseAuth

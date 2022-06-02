@@ -5,9 +5,12 @@ import androidx.lifecycle.ViewModel
 import com.example.tasky.data.model.entities.Resource
 import com.example.tasky.data.model.entities.Task
 import com.example.tasky.data.model.entities.TaskWithSubtasks
+import com.example.tasky.data.model.entities.UserWIthTasks
 import com.example.tasky.data.repositories.TasksRepository
+import com.example.tasky.utils.preferences.PreferenceHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -25,7 +28,7 @@ class TasksViewModel @Inject constructor(
 
     private val allTasksWithSubtasks: MutableLiveData<Resource<List<TaskWithSubtasks>>> = MutableLiveData()
 
-    fun getAllTasks(): MutableLiveData<Resource<List<Task>>> {
+    fun getAllTaskss(): MutableLiveData<Resource<List<Task>>> {
         disposables.add(
             tasksRepository.getAllTasks()
                 .subscribeOn(Schedulers.io())
@@ -57,6 +60,10 @@ class TasksViewModel @Inject constructor(
                 )
         )
         return allTasksWithSubtasks
+    }
+
+    fun getAllTasks(): Single<UserWIthTasks> {
+        return tasksRepository.getUserWithTasks()
     }
 
     fun deleteTaskId(id: Long): Single<Int> {

@@ -70,5 +70,7 @@ class NetworkModule {
         const val LOGIN = "/api/account/login"
         const val GET_USER = "/api/users/{id}"
         const val LOGOUT = "/api/account/logout"
+        const val GET_USER_TASKS = "/api/users/tasks/{id}"
+        const val ADD_TASK = "/api/users/tasks/{id}"
     }
 }
