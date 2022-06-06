@@ -143,4 +143,23 @@ class TasksRepository @Inject constructor(
             }
         }
     }
+
+    fun updateSubtask(subtask: Subtask): Single<Subtask> {
+        return Single.create { emitter ->
+
+            val result = taskyApi.updateSubtask(subtask.subtaskId, subtask).execute()
+
+            if (result.isSuccessful) {
+                val data = result.body()
+
+                if (data != null) {
+                    emitter.onSuccess(data)
+                } else {
+                    emitter.onError(Exception(result.message()))
+                }
+            } else {
+                emitter.onError(Exception(result.message()))
+            }
+        }
+    }
 }

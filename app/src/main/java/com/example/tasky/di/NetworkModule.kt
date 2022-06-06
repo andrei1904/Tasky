@@ -77,5 +77,6 @@ class NetworkModule {
         const val ADD_SUBTASKS = "/api/subtasks/{taskId}"
         const val UPDATE_TASK_PROGRESS = "/api/tasks/{taskId}/progress"
         const val UPDATE_TASK_TIME = "/api/tasks/{taskId}/time"
+        const val UPDATE_SUBTASK = "/api/subtasks/{subtaskId}"
     }
 }

@@ -9,7 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tasky.data.model.entities.Icon
 import com.example.tasky.data.model.entities.IconType
+import com.example.tasky.data.model.entities.Subtask
 import com.example.tasky.data.model.entities.TaskWithSubtasks
+import com.example.tasky.data.model.enums.SubtaskStatus
 import com.example.tasky.databinding.FragmentTaskBinding
 import com.example.tasky.ui.activites.BaseActivity
 import com.example.tasky.ui.adapter.TaskSubtasksAdapter
@@ -18,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class TaskFragment(private val taskWithSubtasks: TaskWithSubtasks) :
-    BaseFragment<FragmentTaskBinding>(), TaskSubtasksAdapter.TaskListener {
+    BaseFragment<FragmentTaskBinding>(), TaskSubtasksAdapter.Listener {
 
     private lateinit var taskSubtasksAdapter: TaskSubtasksAdapter
 
@@ -89,6 +91,15 @@ class TaskFragment(private val taskWithSubtasks: TaskWithSubtasks) :
 
     override fun onStopTimeClicked(taskId: Long, spentTime: Long) {
         viewModel.updateTimeSpent(taskId, spentTime)
+            .subscribe({
+
+            }, { throwable ->
+                Toast.makeText(context, throwable.message, Toast.LENGTH_SHORT).show()
+            })
+    }
+
+    override fun onSubtaskStatusChange(subtask: Subtask) {
+        viewModel.updateSubtask(subtask)
             .subscribe({
 
             }, { throwable ->

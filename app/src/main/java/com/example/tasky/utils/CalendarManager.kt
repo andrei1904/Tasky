@@ -21,7 +21,7 @@ class CalendarManager {
         val startHour = currentDateTime.get(Calendar.HOUR_OF_DAY)
         val startMinute = currentDateTime.get(Calendar.MINUTE)
 
-        DatePickerDialog(
+        val datePicker = DatePickerDialog(
             context,
             { _, year, month, day ->
                 TimePickerDialog(
@@ -50,10 +50,12 @@ class CalendarManager {
             startYear,
             startMonth,
             startDay
-        ).show()
+        )
+        datePicker.datePicker.minDate = System.currentTimeMillis() - 1000
+        datePicker.show()
     }
 
-    fun getDateTimeFromMillis(millis: Long, formatter: SimpleDateFormat): String {
+    private fun getDateTimeFromMillis(millis: Long, formatter: SimpleDateFormat): String {
         val calendar = Calendar.getInstance()
         calendar.timeInMillis = millis
 

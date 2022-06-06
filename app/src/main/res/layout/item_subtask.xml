@@ -3,30 +3,125 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:layout_marginStart="10dp"
     android:layout_marginTop="10dp"
     android:layout_marginEnd="10dp"
     android:background="@color/white">
 
     <TextView
-        android:id="@+id/text_view_number"
+        android:id="@+id/text_view_number_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="2dp"
+        android:text="@string/subtask_number"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@id/text_view_number"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Subtask 1" />
+        tools:text="1" />
+
+    <TextView
+        android:id="@+id/text_view_title_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/title"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/text_view_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="2dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_view_number"
+        app:layout_constraintTop_toBottomOf="@id/text_view_title_info"
         tools:text="Title" />
 
+    <TextView
+        android:id="@+id/text_view_description_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/description"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_title" />
+
+    <TextView
+        android:id="@+id/text_view_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="20dp"
+        android:minLines="3"
+        android:text="@string/description"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_description_info" />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/buttons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_description">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/new_task"
+            app:cornerRadius="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_in_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/in_progress"
+            app:cornerRadius="0dp"
+            app:layout_constraintStart_toEndOf="@id/button_new"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/complete"
+            app:cornerRadius="0dp"
+            app:layout_constraintStart_toEndOf="@id/button_in_progress"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

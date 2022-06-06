@@ -1,5 +1,6 @@
 package com.example.tasky.ui.adapter
 
+import android.content.res.ColorStateList
 import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +10,13 @@ import com.example.tasky.R
 import com.example.tasky.data.model.entities.Subtask
 import com.example.tasky.data.model.entities.Task
 import com.example.tasky.data.model.entities.TaskWithSubtasks
+import com.example.tasky.data.model.enums.SubtaskStatus
 import com.example.tasky.databinding.ItemSubtaskBinding
 import com.example.tasky.databinding.ItemTaskMoreBinding
 import com.example.tasky.utils.DateFormater
 
 class TaskSubtasksAdapter(
-    private val listener: TaskListener
+    private val listener: Listener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var task: Task
@@ -56,7 +58,7 @@ class TaskSubtasksAdapter(
         if (subtasks.size == 0) {
             initTask(holder)
         } else {
-            initTaskWithSubtasks()
+            initTaskWithSubtasks(holder)
         }
         holder.textViewDomain.text = task.domain
         holder.textViewTitle.text = task.title
@@ -95,7 +97,7 @@ class TaskSubtasksAdapter(
         }
     }
 
-    private fun initTaskWithSubtasks() {
+    private fun initTaskWithSubtasks(holder: TaskViewHolder) {
 
     }
 
@@ -105,7 +107,10 @@ class TaskSubtasksAdapter(
             // start time tracking
             if (!isTracking) {
                 holder.buttonTime.setImageResource(R.drawable.ic_baseline_pause_24)
-                if (lastPause != 0L) { // resume
+                if (lastPause == 0L) {
+                    holder.chronometer.base = SystemClock.elapsedRealtime() - task.spentTime
+                }
+                else { // resume
                     holder.chronometer.base = holder.chronometer.base +
                             SystemClock.elapsedRealtime() - lastPause
                 }
@@ -122,9 +127,81 @@ class TaskSubtasksAdapter(
     }
 
     private fun bindSubtask(holder: SubtasksViewHolder, position: Int) {
+        val subtask = subtasks[position]
+
         holder.textViewNumber.text = position.toString()
+        holder.textViewTitle.text = subtask.title
+        holder.textViewDescription.text = subtask.description
+
+        initButtons(holder, subtask)
+        initButtonsListeners(holder, subtask)
     }
 
+    private fun initButtons(holder: SubtasksViewHolder, subtask: Subtask) {
+        when (subtask.status) {
+            SubtaskStatus.NEW -> {
+                holder.buttonNew.isEnabled = false
+                holder.buttonInProgress.isEnabled = true
+                holder.buttonComplete.isEnabled = false
+
+                holder.buttonNew.backgroundTintList = ColorStateList.valueOf(
+                    holder.itemView.context.getColor(R.color.generalBlueColor)
+                )
+                holder.buttonInProgress.backgroundTintList = ColorStateList.valueOf(
+                    holder.itemView.context.getColor(R.color.grey)
+                )
+                holder.buttonComplete.backgroundTintList = ColorStateList.valueOf(
+                    holder.itemView.context.getColor(R.color.grey)
+                )
+            }
+
+            SubtaskStatus.IN_PROGRESS -> {
+                holder.buttonNew.isEnabled = false
+                holder.buttonInProgress.isEnabled = false
+                holder.buttonComplete.isEnabled = true
+
+                holder.buttonNew.backgroundTintList = ColorStateList.valueOf(
+                    holder.itemView.context.getColor(R.color.grey)
+                )
+                holder.buttonInProgress.backgroundTintList = ColorStateList.valueOf(
+                    holder.itemView.context.getColor(R.color.generalBlueColor)
+                )
+                holder.buttonComplete.backgroundTintList = ColorStateList.valueOf(
+                    holder.itemView.context.getColor(R.color.grey)
+                )
+            }
+
+            SubtaskStatus.COMPLETE -> {
+                holder.buttonNew.isEnabled = false
+                holder.buttonInProgress.isEnabled = true
+                holder.buttonComplete.isEnabled = false
+
+                holder.buttonNew.backgroundTintList = ColorStateList.valueOf(
+                    holder.itemView.context.getColor(R.color.grey)
+                )
+                holder.buttonInProgress.backgroundTintList = ColorStateList.valueOf(
+                    holder.itemView.context.getColor(R.color.grey)
+                )
+                holder.buttonComplete.backgroundTintList = ColorStateList.valueOf(
+                    holder.itemView.context.getColor(R.color.green)
+                )
+            }
+        }
+    }
+
+    private fun initButtonsListeners(holder: SubtasksViewHolder, subtask: Subtask) {
+        holder.buttonInProgress.setOnClickListener {
+            subtask.status = SubtaskStatus.IN_PROGRESS
+            listener.onSubtaskStatusChange(subtask)
+            initButtons(holder, subtask)
+        }
+
+        holder.buttonComplete.setOnClickListener {
+            subtask.status = SubtaskStatus.COMPLETE
+            listener.onSubtaskStatusChange(subtask)
+            initButtons(holder, subtask)
+        }
+    }
     fun setData(taskWithSubtasks: TaskWithSubtasks) {
         task = taskWithSubtasks.task
         subtasks.clear()
@@ -151,6 +228,11 @@ class TaskSubtasksAdapter(
     inner class SubtasksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val binding = ItemSubtaskBinding.bind(itemView)
         val textViewNumber = binding.textViewNumber
+        val textViewTitle = binding.textViewTitle
+        val textViewDescription = binding.textViewDescription
+        val buttonNew = binding.buttonNew
+        val buttonInProgress = binding.buttonInProgress
+        val buttonComplete = binding.buttonComplete
     }
 
     companion object {
@@ -158,10 +240,12 @@ class TaskSubtasksAdapter(
         const val VIEW_TYPE_SUBTASK = 2
     }
 
-    interface TaskListener {
+    interface Listener {
 
         fun onTaskProgressUpdated(taskId: Long, progress: Int)
 
         fun onStopTimeClicked(taskId: Long, spentTime: Long)
+
+        fun onSubtaskStatusChange(subtask: Subtask)
     }
 }

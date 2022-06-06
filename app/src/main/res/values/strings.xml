@@ -49,4 +49,8 @@
     <string name="difficulty">Difficulty:</string>
     <string name="progress">Progress</string>
     <string name="time_spent">Time spent</string>
+    <string name="subtask_number">Subtask number:</string>
+    <string name="new_task">New</string>
+    <string name="in_progress">In Progress</string>
+    <string name="complete">Complete</string>
 </resources>

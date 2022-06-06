@@ -45,4 +45,7 @@ interface TaskyApi {
 
     @PUT(NetworkModule.UPDATE_TASK_TIME)
     fun updateTaskSpentTime(@Path("taskId") taskId: Long, @Body spentTime: Long): Call<Boolean>
+
+    @PUT(NetworkModule.UPDATE_SUBTASK)
+    fun updateSubtask(@Path("subtaskId") subtaskId: Long, @Body subtask: Subtask): Call<Subtask>
 }
