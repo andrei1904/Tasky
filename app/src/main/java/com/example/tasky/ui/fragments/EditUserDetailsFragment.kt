@@ -13,8 +13,6 @@ import com.example.tasky.ui.activites.BaseActivity
 import com.example.tasky.ui.viewmodels.ProfileViewModel
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
 
 @AndroidEntryPoint
 class EditUserDetailsFragment : ValidatorFragment<FragmentEditUserDetailsBinding>() {
@@ -71,8 +69,6 @@ class EditUserDetailsFragment : ValidatorFragment<FragmentEditUserDetailsBinding
         }
 
         viewModel.updateUser()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { result ->
                     if (result == true) {

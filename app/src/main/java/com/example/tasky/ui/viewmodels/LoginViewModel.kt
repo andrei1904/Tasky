@@ -52,9 +52,9 @@ class LoginViewModel @Inject constructor(
         return completedFieldsForLogin
     }
 
-    fun onLogin() : Single<Boolean> {
-        return loginRepository.signIn(account);
-    }
+//    fun onLogin() : Single<Boolean> {
+//        return loginRepository.signIn(account);
+//    }
 
     fun login(): Single<Boolean> {
         return loginRepository.login(account)
@@ -62,17 +62,17 @@ class LoginViewModel @Inject constructor(
 
     fun isUserLoggedIn(): MutableLiveData<Boolean> {
         viewModelScope.launch {
-            _userLoggedIn.value = loginRepository.isLoggedIn()
+            _userLoggedIn.value = false
         }
 
         return _userLoggedIn;
     }
 
-    fun onSignOut() {
-        viewModelScope.launch {
-            loginRepository.signOut()
-        }
-    }
+//    fun onSignOut() {
+//        viewModelScope.launch {
+//            loginRepository.signOut()
+//        }
+//    }
 
     companion object {
         const val EMAIL_VALUE = "email"

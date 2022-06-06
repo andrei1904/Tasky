@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tasky.data.model.entities.Icon
 import com.example.tasky.data.model.entities.IconType
@@ -11,12 +13,16 @@ import com.example.tasky.data.model.entities.TaskWithSubtasks
 import com.example.tasky.databinding.FragmentTaskBinding
 import com.example.tasky.ui.activites.BaseActivity
 import com.example.tasky.ui.adapter.TaskSubtasksAdapter
+import com.example.tasky.ui.viewmodels.TasksViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class TaskFragment(private val taskWithSubtasks: TaskWithSubtasks) : BaseFragment<FragmentTaskBinding>() {
+class TaskFragment(private val taskWithSubtasks: TaskWithSubtasks) :
+    BaseFragment<FragmentTaskBinding>(), TaskSubtasksAdapter.TaskListener {
 
     private lateinit var taskSubtasksAdapter: TaskSubtasksAdapter
+
+    private val viewModel by viewModels<TasksViewModel>()
 
     override fun onCreateViewBinding(inflater: LayoutInflater, container: ViewGroup?) {
         viewBinding = FragmentTaskBinding.inflate(inflater, container, false)
@@ -60,7 +66,7 @@ class TaskFragment(private val taskWithSubtasks: TaskWithSubtasks) : BaseFragmen
     }
 
     private fun initData() {
-        taskSubtasksAdapter = TaskSubtasksAdapter()
+        taskSubtasksAdapter = TaskSubtasksAdapter(this)
         initRecyclerView()
 
         taskSubtasksAdapter.setData(taskWithSubtasks)
@@ -70,6 +76,24 @@ class TaskFragment(private val taskWithSubtasks: TaskWithSubtasks) : BaseFragmen
         val recyclerView = binding.tasksRecyclerView
         recyclerView.layoutManager = LinearLayoutManager(activity)
         recyclerView.adapter = taskSubtasksAdapter
+    }
+
+    override fun onTaskProgressUpdated(taskId: Long, progress: Int) {
+        viewModel.updateProgress(taskId, progress)
+            .subscribe({
+
+            }, { throwable ->
+                Toast.makeText(context, throwable.message, Toast.LENGTH_SHORT).show()
+            })
+    }
+
+    override fun onStopTimeClicked(taskId: Long, spentTime: Long) {
+        viewModel.updateTimeSpent(taskId, spentTime)
+            .subscribe({
+
+            }, { throwable ->
+                Toast.makeText(context, throwable.message, Toast.LENGTH_SHORT).show()
+            })
     }
 
     companion object {

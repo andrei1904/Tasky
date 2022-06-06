@@ -29,6 +29,8 @@
     <string name="subtask">Subtask:</string>
     <string name="would_you_like_to_self_impose_a_deadline_on_this_task">Would you like to self impose a deadline on this task?</string>
     <string name="task_progress_text">%1$d completed subtasks of %2$d</string>
+    <string name="user_name">%1$s %2$s</string>
+    <string name="progress_percentage">%1$d%%</string>
     <string name="sign_up">Sign up</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
@@ -40,4 +42,11 @@
     <string name="edit_deatils">Edit deatils</string>
     <string name="first_name">First name</string>
     <string name="last_name">Last Name</string>
+    <string name="start">start</string>
+    <string name="deadline">Deadline</string>
+    <string name="imposed_deadline">Imposed deadline</string>
+    <string name="priority_info">Priority:</string>
+    <string name="difficulty">Difficulty:</string>
+    <string name="progress">Progress</string>
+    <string name="time_spent">Time spent</string>
 </resources>

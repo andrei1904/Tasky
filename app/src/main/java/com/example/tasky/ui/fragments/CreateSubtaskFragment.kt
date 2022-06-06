@@ -78,11 +78,11 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
 
     private fun initButtons() {
 
-        initOnYesClciked()
-        initOnNoClciked()
+        initOnYesClicked()
+        initOnNoClicked()
     }
 
-    private fun initOnYesClciked() {
+    private fun initOnYesClicked() {
         binding.buttonAddSubtask.setOnClickListener {
             hideMessage()
             addSubtaskView()
@@ -97,12 +97,12 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
     }
 
     private fun addRightIcons() {
-        rightIconList.add(Icon(IconType.ADD_ICON, onAddClciked()))
+        rightIconList.add(Icon(IconType.ADD_ICON, onAddClicked()))
         rightIconList.add(Icon(IconType.NEXT_ICON, { onNextClicked() }))
         rightIconsChanged()
     }
 
-    private fun onAddClciked(): View.OnClickListener {
+    private fun onAddClicked(): View.OnClickListener {
         return View.OnClickListener {
             addSubtaskView()
         }
@@ -111,7 +111,7 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
     private fun onNextClicked() {
 
         if (!viewModel.areSubtasksValid()) {
-            validateOnNextCliked()
+            validateOnNextClicked()
             return
         }
 
@@ -139,7 +139,7 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
         numberOfSubtasks += 1
     }
 
-    private fun initOnNoClciked() {
+    private fun initOnNoClicked() {
         binding.buttonNoAddSubtask.setOnClickListener {
             context?.let { AlertDialog.Builder(it) }
                 ?.setTitle("Add task")
@@ -232,7 +232,7 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
         editText.removeTextChangedListener(textWatcher)
     }
 
-    private fun validateOnNextCliked() {
+    private fun validateOnNextClicked() {
         var isValid: Boolean
 
         for ((position, completedFieldsForSubtask) in viewModel.getSubtaskCompletedFields()
@@ -289,4 +289,6 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
 
         updateSubtaskViewNumbers()
     }
+
+
 }

@@ -64,13 +64,18 @@ class NetworkModule {
 
     companion object {
         private const val DISK_CACHE_SIZE = (50 * 1024 * 1024).toLong()
-        const val API_URL = "http://10.0.2.2:5286"
+//        const val API_URL = "http://10.0.2.2:5286"
+        const val API_URL = "https://taskyserver.azurewebsites.net"
         const val CREATE_USER = "/api/users"
         const val UPDATE_USER = "/api/users/{id}"
         const val LOGIN = "/api/account/login"
         const val GET_USER = "/api/users/{id}"
         const val LOGOUT = "/api/account/logout"
-        const val GET_USER_TASKS = "/api/users/tasks/{id}"
-        const val ADD_TASK = "/api/users/tasks/{id}"
+        const val ADD_TASK = "/api/tasks"
+        const val GET_TASKS = "/api/tasks"
+        const val DELETE_TASK = "/api/tasks/{taskId}"
+        const val ADD_SUBTASKS = "/api/subtasks/{taskId}"
+        const val UPDATE_TASK_PROGRESS = "/api/tasks/{taskId}/progress"
+        const val UPDATE_TASK_TIME = "/api/tasks/{taskId}/time"
     }
 }

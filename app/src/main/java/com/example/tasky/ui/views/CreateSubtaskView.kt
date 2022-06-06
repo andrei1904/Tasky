@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.widget.addTextChangedListener
 import com.example.tasky.R
 import com.example.tasky.databinding.ViewAddSubtaskBinding
 import com.google.android.material.textfield.TextInputLayout
@@ -16,7 +15,7 @@ class CreateSubtaskView(context: Context) :
     private val binding: ViewAddSubtaskBinding =
         ViewAddSubtaskBinding.inflate(LayoutInflater.from(context), this, true)
 
-    private var isExapnded = true
+    private var isExpanded = true
 
     private var subtaskNumber = 0
 
@@ -27,7 +26,7 @@ class CreateSubtaskView(context: Context) :
 
     init {
         binding.imageButtonShowHide.setOnClickListener {
-            if (isExapnded) {
+            if (isExpanded) {
                 hideDetails()
             } else {
                 showDetails()
@@ -55,7 +54,7 @@ class CreateSubtaskView(context: Context) :
                 context.theme
             )
         )
-        isExapnded = !isExapnded
+        isExpanded = !isExpanded
     }
 
     fun hideDetails() {
@@ -67,7 +66,7 @@ class CreateSubtaskView(context: Context) :
                 context.theme
             )
         )
-        isExapnded = !isExapnded
+        isExpanded = !isExpanded
     }
 
     private fun initRemoveButton() {

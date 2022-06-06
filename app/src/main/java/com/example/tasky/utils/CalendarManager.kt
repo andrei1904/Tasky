@@ -10,7 +10,7 @@ import java.util.*
 class CalendarManager {
 
     companion object {
-        const val DATE_TIME_FORMAT = "dd MMM yyyy hh:mm"
+        const val DATE_TIME_FORMAT = "dd MMM yyyy HH:mm"
     }
 
     fun openDatePickerDialog(editText: EditText, context: Context) {

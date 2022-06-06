@@ -2,7 +2,7 @@ package com.example.tasky.data.model.enums
 
 import com.squareup.moshi.Json
 
-enum class Status(val value: String) {
+enum class SubtaskStatus(val value: String) {
     @Json(name = "New")
     NEW("New"),
 
@@ -10,8 +10,5 @@ enum class Status(val value: String) {
     IN_PROGRESS("In Progress"),
 
     @Json(name = "Complete")
-    COMPLETE("Complete"),
-
-    @Json(name = "Overdue")
-    OVERDUE("Overdue")
+    COMPLETE("Complete")
 }

@@ -6,14 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.example.tasky.R
 import com.example.tasky.data.model.entities.Icon
 import com.example.tasky.data.model.entities.IconType
 import com.example.tasky.databinding.FragmnetProfileBinding
 import com.example.tasky.ui.activites.BaseActivity
 import com.example.tasky.ui.activites.LoginActivity
-import com.example.tasky.ui.viewmodels.LoginViewModel
 import com.example.tasky.ui.viewmodels.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -89,12 +88,13 @@ class ProfileFragment : BaseFragment<FragmnetProfileBinding>() {
 
     private fun loadUserDetails() {
         viewModel.getUser()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { result ->
-
-                    binding.textUserName.text = result.firstName + " " + result.lastName
+                    binding.textUserName.text = context?.getString(
+                        R.string.user_name,
+                        result.firstName,
+                        result.lastName
+                    )
 
                 }, { throwable ->
                     throwable.message?.let { safeThrowable ->

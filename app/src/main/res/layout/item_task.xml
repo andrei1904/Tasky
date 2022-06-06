@@ -3,34 +3,59 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="280dp"
+    android:layout_height="wrap_content"
     android:layout_marginStart="15dp"
     android:layout_marginTop="20dp"
     android:layout_marginEnd="15dp"
     android:background="@color/taskBlueCard">
 
     <TextView
-        android:id="@+id/text_view_task_domain"
+        android:id="@+id/text_view_task_domain_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:text="@string/domain"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_view_task_domain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_task_domain_info"
+        tools:text="Domain" />
+
+    <TextView
+        android:id="@+id/text_view_task_title_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp"
+        android:textSize="13sp"
+        android:text="@string/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Domain" />
+        app:layout_constraintTop_toBottomOf="@id/text_view_task_domain"
+        tools:text="Title" />
 
     <TextView
         android:id="@+id/text_view_task_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="2dp"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_view_task_domain"
+        app:layout_constraintTop_toBottomOf="@id/text_view_task_title_info"
         tools:text="Title" />
 
     <ImageButton
@@ -47,24 +72,61 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/text_view_priority"
+        android:id="@+id/text_view_priority_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_view_deadline"
+        android:text="@string/priority_info"/>
+
+    <TextView
+        android:id="@+id/text_view_priority"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/text_view_priority_info"
+        app:layout_constraintTop_toBottomOf="@id/text_view_deadline"
         tools:text="Priority" />
+
+    <TextView
+        android:id="@+id/text_view_difficulty_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="3dp"
+        android:textSize="15sp"
+        app:layout_constraintEnd_toStartOf="@id/text_view_difficulty"
+        app:layout_constraintTop_toBottomOf="@id/text_view_deadline"
+        android:text="@string/difficulty"/>
 
     <TextView
         android:id="@+id/text_view_difficulty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:textStyle="bold"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_view_deadline"
         tools:text="difficulty" />
+
+    <TextView
+        android:id="@+id/text_view_imposed_deadline_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:textSize="13sp"
+        android:text="@string/imposed_deadline"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/text_view_deadline_info" />
 
     <TextView
         android:id="@+id/text_view_imposed_deadline"
@@ -72,18 +134,34 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:visibility="visible"
+        android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/text_view_deadline"
+        app:layout_constraintTop_toBottomOf="@id/text_view_imposed_deadline_info"
         tools:text="deadline" />
+
+    <TextView
+        android:id="@+id/text_view_deadline_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:text="@string/deadline"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_view_task_title"
+        />
 
     <TextView
         android:id="@+id/text_view_deadline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:layout_marginTop="2dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/text_view_task_title"
+        app:layout_constraintTop_toBottomOf="@id/text_view_deadline_info"
         tools:text="deadline" />
 
     <View
@@ -118,8 +196,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/text_view_description"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="0 of 5 subtasks completed" />
 
@@ -128,8 +206,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/text_view_description"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="5%" />
 
@@ -140,6 +218,8 @@
         android:layout_height="8dp"
         android:max="100"
         android:scaleY="3"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/text_view_subtasks"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

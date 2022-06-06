@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import com.example.tasky.R
 import com.example.tasky.data.model.entities.Icon
@@ -21,7 +20,7 @@ import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CreateTaskFragment : BaseFragment<FragmentCreateTaskBinding>() {
+class CreateTaskFragment : ValidatorFragment<FragmentCreateTaskBinding>() {
 
     private val viewModel by activityViewModels<CreateTaskViewModel>()
 
@@ -70,69 +69,12 @@ class CreateTaskFragment : BaseFragment<FragmentCreateTaskBinding>() {
     }
 
     private fun nextButtonClicked() {
-//        if (!viewModel.isTaskValid()) {
-//            validateOnNextCliked()
-//            return
-//        }
+        if (!viewModel.isTaskValid()) {
+            validate(viewModel.values.ALL_TASK_FIELDS, viewModel.getTaskCompletedFields())
+            return
+        }
 
         (activity as BaseActivity).getFragmentNavigation().replaceFragment(CreateSubtaskFragment())
-    }
-
-    private fun validateOnNextCliked() {
-        var isValid: Boolean
-        for (field in viewModel.values.ALL_TASK_FIELDS) {
-            isValid = viewModel.getTaskCompltedFields().contains(field)
-
-            when (field) {
-                viewModel.values.DOMAIN_VALUE -> {
-                    setValidationError(binding.textInputDomain, isValid)
-                }
-                viewModel.values.TITLE_VALUE -> {
-                    setValidationError(binding.textInputTitle, isValid)
-                }
-                viewModel.values.PRIORITY_VALUE -> {
-                    setValidationError(binding.textInputPriority, isValid)
-                }
-                viewModel.values.DEADLINE_VALUE -> {
-                    setValidationError(binding.textInputDeadline, isValid)
-
-                }
-                viewModel.values.DESCRIPTION_VALUE -> {
-                    setValidationError(binding.textInputDescription, isValid)
-                }
-            }
-        }
-    }
-
-    private fun setValidationError(textInputLayout: TextInputLayout, isValid: Boolean) {
-        if (isValid) {
-            textInputLayout.isErrorEnabled = false
-        } else {
-            textInputLayout.error = "Add " + textInputLayout.hint
-        }
-    }
-
-    private fun addValidationListeners() {
-        addValidationListener(binding.textInputDomain, viewModel.values.DOMAIN_VALUE)
-        addValidationListener(binding.textInputTitle, viewModel.values.TITLE_VALUE)
-        addValidationListener(binding.textInputPriority, viewModel.values.PRIORITY_VALUE)
-        addValidationListener(binding.textInputDeadline, viewModel.values.DEADLINE_VALUE)
-        addValidationListener(binding.textInputDescription, viewModel.values.DESCRIPTION_VALUE)
-    }
-
-    private fun addValidationListener(textInputLayout: TextInputLayout, field: String) {
-        val editText = textInputLayout.editText ?: return
-
-        editText.addTextChangedListener { editable ->
-            val value = editable.toString()
-
-            if (value.isEmpty()) {
-                textInputLayout.error = "Add " + textInputLayout.hint
-            } else {
-                textInputLayout.isErrorEnabled = false
-            }
-            viewModel.setTaskField(value, field)
-        }
     }
 
     private fun initPriorityDropdownMenu() {
@@ -154,5 +96,30 @@ class CreateTaskFragment : BaseFragment<FragmentCreateTaskBinding>() {
         editText.setOnClickListener {
             CalendarManager().openDatePickerDialog(editText, requireContext())
         }
+    }
+
+    override fun getTextInputsMap(): Map<String, TextInputLayout> {
+        val map = HashMap<String, TextInputLayout>()
+
+        map[viewModel.values.DOMAIN_VALUE] = binding.textInputDomain
+        map[viewModel.values.TITLE_VALUE] = binding.textInputTitle
+        map[viewModel.values.PRIORITY_VALUE] = binding.textInputPriority
+        map[viewModel.values.DEADLINE_VALUE] = binding.textInputDeadline
+        map[viewModel.values.DESCRIPTION_VALUE] = binding.textInputDescription
+
+        return map
+    }
+
+    private fun addValidationListeners() {
+        addValidationListener(binding.textInputDomain, viewModel.values.DOMAIN_VALUE)
+        { x: String, y: String -> viewModel.setTaskField(x, y) }
+        addValidationListener(binding.textInputTitle, viewModel.values.TITLE_VALUE)
+        { x: String, y: String -> viewModel.setTaskField(x, y) }
+        addValidationListener(binding.textInputPriority, viewModel.values.PRIORITY_VALUE)
+        { x: String, y: String -> viewModel.setTaskField(x, y) }
+        addValidationListener(binding.textInputDeadline, viewModel.values.DEADLINE_VALUE)
+        { x: String, y: String -> viewModel.setTaskField(x, y) }
+        addValidationListener(binding.textInputDescription, viewModel.values.DESCRIPTION_VALUE)
+        { x: String, y: String -> viewModel.setTaskField(x, y) }
     }
 }

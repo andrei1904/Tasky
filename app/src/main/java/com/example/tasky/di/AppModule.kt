@@ -7,9 +7,6 @@ import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.example.tasky.data.local.AppDatabase
 import com.example.tasky.utils.preferences.PreferenceHelper
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,12 +24,6 @@ class AppModule() {
         return Room.databaseBuilder(applicationContext, AppDatabase::class.java,"tasky")
             .fallbackToDestructiveMigration()
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideFirebaseAuth(@ApplicationContext context: Context): FirebaseAuth {
-        return Firebase.auth
     }
 
     @Provides

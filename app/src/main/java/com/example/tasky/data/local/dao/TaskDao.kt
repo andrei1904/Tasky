@@ -19,11 +19,11 @@ interface TaskDao {
     fun getAllWithSubtasks() : List<TaskWithSubtasks>
 
     @Query("DELETE FROM task WHERE taskId = :id")
-    fun deleteTaskById(id: Long): Single<Int>
+    fun deleteTaskById(id: Long): Int
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertTask(task: Task): Single<Long>
+    fun insertTask(task: Task): Long
 
     @Transaction
     @Insert(onConflict = OnConflictStrategy.REPLACE)

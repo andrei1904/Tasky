@@ -20,7 +20,6 @@ abstract class ValidatorFragment<VB : ViewBinding> : BaseFragment<VB>() {
     }
 
     protected fun validate(
-//        textInputs: Map<String, TextInputLayout>,
         allFields: List<String>,
         completedFields: MutableSet<String>
     ) {

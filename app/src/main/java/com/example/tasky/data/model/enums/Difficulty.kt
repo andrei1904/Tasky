@@ -2,13 +2,13 @@ package com.example.tasky.data.model.enums
 
 import com.squareup.moshi.Json
 
-enum class Priority(val value: String) {
-    @Json(name = "Low")
-    LOW("Low"),
+enum class Difficulty(val value: String) {
+    @Json(name = "Easy")
+    EASY("Easy"),
 
     @Json(name = "Medium")
     MEDIUM("Medium"),
 
-    @Json(name = "High")
-    HIGH("High")
+    @Json(name = "Hard")
+    HARD("Hard")
 }

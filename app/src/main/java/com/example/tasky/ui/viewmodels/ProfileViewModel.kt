@@ -1,15 +1,14 @@
 package com.example.tasky.ui.viewmodels
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.tasky.data.model.entities.UserDetails
 import com.example.tasky.data.repositories.LoginRepository
 import com.example.tasky.data.repositories.UserRepository
-import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
-import kotlin.math.log
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
@@ -48,15 +47,19 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun getCompletedFields(): MutableSet<String> {
-        return completedFields;
+        return completedFields
     }
 
     fun updateUser(): Single<Boolean> {
         return userRepository.updateUser(userDetails)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun getUser(): Single<UserDetails> {
         return userRepository.getUserDetails()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
     }
 
     fun logout(): Single<Boolean> {

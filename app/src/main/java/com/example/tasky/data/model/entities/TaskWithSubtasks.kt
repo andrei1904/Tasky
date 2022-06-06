@@ -2,6 +2,7 @@ package com.example.tasky.data.model.entities
 
 import androidx.room.Embedded
 import androidx.room.Relation
+import com.example.tasky.data.model.enums.SubtaskStatus
 
 data class TaskWithSubtasks(
     @Embedded val task: Task,
@@ -14,7 +15,7 @@ data class TaskWithSubtasks(
 
     fun getNumberOfCompletedSubtasks(): Long {
         return subtasks.stream()
-            .filter { subtask -> subtask.isCompleted }
+            .filter { subtask -> subtask.status == SubtaskStatus.COMPLETE }
             .count()
     }
 

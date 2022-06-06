@@ -19,9 +19,9 @@ class SignupViewModel @Inject constructor(
 
     private val completedFields: MutableSet<String> = mutableSetOf()
 
-    fun onSignup() : Single<Boolean> {
-        return loginRepository.signUp(account)
-    }
+//    fun onSignup() : Single<Boolean> {
+//        return loginRepository.signUp(account)
+//    }
 
     fun createUser(): Single<Boolean> {
         return loginRepository.createUser(account)

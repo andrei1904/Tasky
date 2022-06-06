@@ -66,29 +66,46 @@ class CreateTaskViewModel @Inject constructor(
         return false
     }
 
-    fun getTaskCompltedFields(): MutableSet<String> {
+    fun getTaskCompletedFields(): MutableSet<String> {
         return completedFieldsForTask
     }
 
     fun addTask(): Single<Boolean> {
-        return tasksRepository.createTask(task)
-            .map { id ->
-                id > 0
-            }
-    }
-
-    fun addTaskSubtasks(): Single<Boolean> {
         return Single.create { emitter ->
-            tasksRepository.createTask(task)
+            tasksRepository.addTask(task)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .subscribe({ id ->
                     if (id > 0) {
-                        for (subtask in subtasks) {
-                            subtask.mainTaskId = id
-                        }
-                        tasksRepository.createSubtasks(subtasks)
                         emitter.onSuccess(true)
+                    }
+                }, { throwable ->
+                    emitter.onError(throwable)
+                })
+        }
+    }
+
+    fun addTaskSubtasks(): Single<Boolean> {
+        return Single.create { emitter ->
+            tasksRepository.addTask(task)
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .subscribe({ id ->
+                    if (id > 0) {
+                        if (subtasks.size > 0) {
+                            for (subtask in subtasks) {
+                                subtask.mainTaskId = id
+                            }
+                            tasksRepository.addSubtasks(id, subtasks)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(Schedulers.io())
+                                .subscribe({
+                                    emitter.onSuccess(true)
+                                }, {
+                                    throwable ->
+                                    emitter.onError(Exception(throwable.message))
+                                })
+                        }
                     }
                 }, { throwable ->
                     emitter.onError(throwable)

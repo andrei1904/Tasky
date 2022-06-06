@@ -16,8 +16,7 @@ import com.example.tasky.ui.activites.BaseActivity
 import com.example.tasky.ui.adapter.TasksAdapter
 import com.example.tasky.ui.viewmodels.TasksViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 @AndroidEntryPoint
 class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.TaskClickListener {
@@ -26,12 +25,17 @@ class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.TaskCli
 
     private val viewModel by viewModels<TasksViewModel>()
 
+    private val disposable = CompositeDisposable()
+
     override fun onCreateViewBinding(inflater: LayoutInflater, container: ViewGroup?) {
         viewBinding = FragmentTasksBinding.inflate(inflater, container, false)
 
         if (rootView == null) {
             rootView = viewBinding!!.root
             isFirstLoaded = true
+            tasksAdapter = TasksAdapter(this)
+            initRecyclerView()
+            loadData()
         } else {
             isFirstLoaded = false
         }
@@ -58,9 +62,9 @@ class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.TaskCli
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tasksAdapter = TasksAdapter(this)
-        initRecyclerView()
-        loadData()
+        if (isFirstLoaded) {
+
+        }
     }
 
     private fun initRecyclerView() {
@@ -70,54 +74,42 @@ class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.TaskCli
     }
 
     private fun loadData() {
-        viewModel.getAllTasks()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { result ->
-                    tasksAdapter.setTasksList(result.tasks)
-                },
-                { throwbale ->
-                    Toast.makeText(context, throwbale.message, Toast.LENGTH_SHORT).show()
-                }
-            )
-
-//            .observe(viewLifecycleOwner) { result ->
-//            if (result.status == Status.SUCCESS) {
-//                result.data?.let { tasksAdapter.setTasksList(it) }
-//            } else {
-//                Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show()
-//            }
+        disposable.add(
+            viewModel.getAllTasks()
+                .subscribe(
+                    { result ->
+                        tasksAdapter.setTasksList(result)
+                    },
+                    { throwable ->
+                        Toast.makeText(context, throwable.message, Toast.LENGTH_SHORT).show()
+                    }
+                )
+        )
     }
 
     override fun onDeleteClicked(taskId: Long, position: Int) {
-//        viewModel.deleteTaskById(taskId).observe(viewLifecycleOwner) { result ->
-//            if (result.status == Status.SUCCESS && result.data == true) {
-//                // SE APELEAZA MULTIPLU ...
-//                Log.d("okoko", taskId.toString());
-//                tasksAdapter.notifyItemDeleted(position)
-//            } else {
-//                Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-
-        viewModel.deleteTaskId(taskId)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { result ->
-                    if (result > 0) {
-                        tasksAdapter.notifyItemDeleted(position)
+        disposable.add(
+            viewModel.deleteTaskById(taskId)
+                .subscribe(
+                    { result ->
+                        if (result) {
+                            tasksAdapter.notifyItemDeleted(position)
+                        }
+                    },
+                    { throwable ->
+                        Toast.makeText(context, throwable.message, Toast.LENGTH_SHORT).show()
                     }
-                },
-                {
-                    Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show()
-                }
-            )
+                )
+        )
     }
 
     override fun onTaskClicked(taskWithSubtasks: TaskWithSubtasks) {
         (activity as BaseActivity).getFragmentNavigation()
             .replaceFragment(TaskFragment(taskWithSubtasks))
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable.clear()
     }
 }
