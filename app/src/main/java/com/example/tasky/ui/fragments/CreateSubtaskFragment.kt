@@ -6,11 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AlertDialog
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import com.example.tasky.R
 import com.example.tasky.data.model.entities.Icon
 import com.example.tasky.data.model.entities.IconType
+import com.example.tasky.data.model.enums.Difficulty
 import com.example.tasky.databinding.FragmentCreateSubtasksBinding
 import com.example.tasky.ui.activites.BaseActivity
 import com.example.tasky.ui.viewmodels.CreateTaskViewModel
@@ -56,6 +60,7 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
 
             subtaskTextWatcher[viewModel.values.TITLE_VALUE] = arrayListOf()
             subtaskTextWatcher[viewModel.values.DESCRIPTION_VALUE] = arrayListOf()
+            subtaskTextWatcher[viewModel.values.DIFFICULTY_VALUE] = arrayListOf()
         }
     }
 
@@ -134,9 +139,20 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
         subtaskView.setSubtaskNumber(numberOfSubtasks)
         viewModel.addSubtask()
 
+        initDropdownMenu(subtaskView)
         addValidationListeners(numberOfSubtasks)
 
         numberOfSubtasks += 1
+    }
+
+    private fun initDropdownMenu(subtaskView: CreateSubtaskView) {
+        (subtaskView.getTextInputLayoutDifficulty().editText as? AutoCompleteTextView)?.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                R.layout.item_difficulty_list,
+                listOf(Difficulty.EASY.value, Difficulty.MEDIUM.value, Difficulty.HARD.value)
+            )
+        )
     }
 
     private fun initOnNoClicked() {
@@ -186,6 +202,11 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
             viewModel.values.DESCRIPTION_VALUE,
             subtaskPosition
         )
+        addValidationListener(
+            subtaskViewList[subtaskPosition].getTextInputLayoutDifficulty(),
+            viewModel.values.DIFFICULTY_VALUE,
+            subtaskPosition
+        )
     }
 
     private fun addValidationListener(
@@ -219,6 +240,11 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
             viewModel.values.DESCRIPTION_VALUE,
             subtaskPosition
         )
+        removeValidationListener(
+            subtaskViewList[subtaskPosition].getTextInputLayoutDifficulty(),
+            viewModel.values.DIFFICULTY_VALUE,
+            subtaskPosition
+        )
     }
 
     private fun removeValidationListener(
@@ -250,6 +276,12 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
                     viewModel.values.DESCRIPTION_VALUE -> {
                         setValidationError(
                             subtaskViewList[position].getTextInputLayoutDescription(),
+                            isValid
+                        )
+                    }
+                    viewModel.values.DIFFICULTY_VALUE -> {
+                        setValidationError(
+                            subtaskViewList[position].getTextInputLayoutDifficulty(),
                             isValid
                         )
                     }
@@ -289,6 +321,4 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
 
         updateSubtaskViewNumbers()
     }
-
-
 }

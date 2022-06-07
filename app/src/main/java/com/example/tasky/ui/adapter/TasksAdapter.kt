@@ -65,7 +65,10 @@ class TasksAdapter(
             taskWithSubtasks.task.status, holder.itemView.context
         )
 
-        holder.binding.textViewProgress.text = taskWithSubtasks.task.progress.toString()
+        holder.binding.textViewProgress.text = holder.itemView.context.getString(
+            R.string.progress_percentage,
+            taskWithSubtasks.task.progress
+        )
 
         holder.binding.textViewDifficulty.text = taskWithSubtasks.task.difficulty.value
 

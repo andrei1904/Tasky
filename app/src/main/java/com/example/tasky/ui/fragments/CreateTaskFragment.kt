@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.tasky.R
 import com.example.tasky.data.model.entities.Icon
 import com.example.tasky.data.model.entities.IconType
+import com.example.tasky.data.model.enums.Difficulty
 import com.example.tasky.data.model.enums.Priority
 import com.example.tasky.databinding.FragmentCreateTaskBinding
 import com.example.tasky.ui.activites.BaseActivity
@@ -39,7 +40,7 @@ class CreateTaskFragment : ValidatorFragment<FragmentCreateTaskBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         if (isFirstLoaded) {
-            initPriorityDropdownMenu()
+            initDropdownMenu()
             initDateTimePicker()
 
             addValidationListeners()
@@ -77,12 +78,19 @@ class CreateTaskFragment : ValidatorFragment<FragmentCreateTaskBinding>() {
         (activity as BaseActivity).getFragmentNavigation().replaceFragment(CreateSubtaskFragment())
     }
 
-    private fun initPriorityDropdownMenu() {
+    private fun initDropdownMenu() {
         (binding.textInputPriority.editText as? AutoCompleteTextView)?.setAdapter(
             ArrayAdapter(
                 requireContext(),
                 R.layout.item_priority_list,
                 listOf(Priority.LOW.value, Priority.MEDIUM.value, Priority.HIGH.value)
+            )
+        )
+        (binding.textInputDifficulty.editText as? AutoCompleteTextView)?.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                R.layout.item_difficulty_list,
+                listOf(Difficulty.EASY.value, Difficulty.MEDIUM.value, Difficulty.HARD.value)
             )
         )
     }
@@ -106,6 +114,7 @@ class CreateTaskFragment : ValidatorFragment<FragmentCreateTaskBinding>() {
         map[viewModel.values.PRIORITY_VALUE] = binding.textInputPriority
         map[viewModel.values.DEADLINE_VALUE] = binding.textInputDeadline
         map[viewModel.values.DESCRIPTION_VALUE] = binding.textInputDescription
+        map[viewModel.values.DESCRIPTION_VALUE] = binding.textInputDescription
 
         return map
     }
@@ -120,6 +129,8 @@ class CreateTaskFragment : ValidatorFragment<FragmentCreateTaskBinding>() {
         addValidationListener(binding.textInputDeadline, viewModel.values.DEADLINE_VALUE)
         { x: String, y: String -> viewModel.setTaskField(x, y) }
         addValidationListener(binding.textInputDescription, viewModel.values.DESCRIPTION_VALUE)
+        { x: String, y: String -> viewModel.setTaskField(x, y) }
+        addValidationListener(binding.textInputDifficulty, viewModel.values.DIFFICULTY_VALUE)
         { x: String, y: String -> viewModel.setTaskField(x, y) }
     }
 }

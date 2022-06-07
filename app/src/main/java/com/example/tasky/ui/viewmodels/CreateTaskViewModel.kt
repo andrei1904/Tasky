@@ -3,6 +3,7 @@ package com.example.tasky.ui.viewmodels
 import androidx.lifecycle.ViewModel
 import com.example.tasky.data.model.entities.Subtask
 import com.example.tasky.data.model.entities.Task
+import com.example.tasky.data.model.enums.Difficulty
 import com.example.tasky.data.model.enums.Priority
 import com.example.tasky.data.repositories.TasksRepository
 import com.example.tasky.utils.CalendarManager
@@ -49,6 +50,9 @@ class CreateTaskViewModel @Inject constructor(
             }
             DESCRIPTION_VALUE -> {
                 task.description = value
+            }
+            DIFFICULTY_VALUE -> {
+                task.difficulty = Difficulty.valueOf(value.uppercase(Locale.ENGLISH))
             }
         }
 
@@ -127,6 +131,9 @@ class CreateTaskViewModel @Inject constructor(
             DESCRIPTION_VALUE -> {
                 subtask.description = value
             }
+            DIFFICULTY_VALUE -> {
+                subtask.difficulty = Difficulty.valueOf(value.uppercase(Locale.ENGLISH))
+            }
         }
 
         if (value.isEmpty()) {
@@ -168,11 +175,12 @@ class CreateTaskViewModel @Inject constructor(
         const val DEADLINE_VALUE = "deadline"
         const val PRIORITY_VALUE = "priority"
         const val DESCRIPTION_VALUE = "description"
+        const val DIFFICULTY_VALUE = "difficulty"
         val ALL_TASK_FIELDS =
-            listOf(DOMAIN_VALUE, TITLE_VALUE, DEADLINE_VALUE, PRIORITY_VALUE, DESCRIPTION_VALUE)
-        val ALL_SUBTASK_FIELDS = listOf(TITLE_VALUE, DESCRIPTION_VALUE)
-        private const val NUMBER_OF_FIELDS_FOR_TASK = 5
-        private const val NUMBER_OF_FIELDS_FOR_SUBTASK = 2
-        const val DATE_TIME_FORMAT = "dd MMM yyyy hh:mm"
+            listOf(DOMAIN_VALUE, TITLE_VALUE, DEADLINE_VALUE, PRIORITY_VALUE, DESCRIPTION_VALUE, DIFFICULTY_VALUE)
+        val ALL_SUBTASK_FIELDS = listOf(TITLE_VALUE, DESCRIPTION_VALUE, DIFFICULTY_VALUE)
+        private const val NUMBER_OF_FIELDS_FOR_TASK = 6
+        private const val NUMBER_OF_FIELDS_FOR_SUBTASK = 3
+        const val DATE_TIME_FORMAT = "dd MMM yyyy HH:mm"
     }
 }

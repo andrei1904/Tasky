@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.tasky.data.model.enums.Difficulty
 import com.example.tasky.data.model.enums.Priority
+import com.example.tasky.data.model.enums.ProgressBarType
 import com.example.tasky.data.model.enums.Status
 
 @Entity(tableName = "task")
@@ -19,17 +20,7 @@ data class Task(
     var imposedDeadline: Long = 0,
     var status: Status = Status.NEW,
     var spentTime: Long = 0,
-    var difficulty: Difficulty = Difficulty.EASY
+    var difficulty: Difficulty = Difficulty.EASY,
+    var progressBarType: ProgressBarType = ProgressBarType.TYPE1
 ) {
-    fun updateStatus() {
-        status = if (progress == 0) {
-            Status.NEW
-        } else {
-            if (progress < 100) {
-                Status.IN_PROGRESS
-            } else {
-                Status.COMPLETE
-            }
-        }
-    }
 }

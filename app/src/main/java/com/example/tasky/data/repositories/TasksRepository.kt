@@ -4,7 +4,6 @@ import com.example.tasky.data.local.AppDatabase
 import com.example.tasky.data.model.entities.Subtask
 import com.example.tasky.data.model.entities.Task
 import com.example.tasky.data.model.entities.TaskWithSubtasks
-import com.example.tasky.data.model.requests.ProgressStatusRequest
 import com.example.tasky.data.remote.TaskyApi
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject

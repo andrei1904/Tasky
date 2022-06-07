@@ -23,6 +23,7 @@ class CreateSubtaskView(context: Context) :
 
     private var textInputLayoutTitle: TextInputLayout
     private var textInputLayoutDescription: TextInputLayout
+    private var textInputLayoutDifficulty: TextInputLayout
 
     init {
         binding.imageButtonShowHide.setOnClickListener {
@@ -37,12 +38,14 @@ class CreateSubtaskView(context: Context) :
 
         textInputLayoutTitle = binding.textInputTitle
         textInputLayoutDescription = binding.textInputDescription
+        textInputLayoutDifficulty = binding.textInputDifficulty
     }
 
     fun setSubtaskNumber(numberOfSubtasks: Int) {
         subtaskNumber = numberOfSubtasks
 
-        binding.textViewSubtakName.text = subtaskNumber.toString()
+        val number = subtaskNumber + 1
+        binding.textViewSubtakName.text = number.toString()
     }
 
     private fun showDetails() {
@@ -85,6 +88,10 @@ class CreateSubtaskView(context: Context) :
 
     fun getTextInputLayoutDescription() : TextInputLayout {
         return textInputLayoutDescription
+    }
+
+    fun getTextInputLayoutDifficulty() : TextInputLayout {
+        return textInputLayoutDifficulty
     }
 
     interface CreateSubtaskViewListener {

@@ -5,11 +5,15 @@ import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
+import com.baoyachi.stepview.bean.StepBean
 import com.example.tasky.R
 import com.example.tasky.data.model.entities.Subtask
 import com.example.tasky.data.model.entities.Task
 import com.example.tasky.data.model.entities.TaskWithSubtasks
+import com.example.tasky.data.model.enums.Difficulty
+import com.example.tasky.data.model.enums.ProgressBarType
 import com.example.tasky.data.model.enums.SubtaskStatus
 import com.example.tasky.databinding.ItemSubtaskBinding
 import com.example.tasky.databinding.ItemTaskMoreBinding
@@ -21,9 +25,11 @@ class TaskSubtasksAdapter(
 
     private lateinit var task: Task
     private val subtasks: ArrayList<Subtask> = arrayListOf()
+    private var currentSubtask: Int = 0
 
     private var isTracking = false
     private var lastPause: Long = 0
+    private val percentage = mutableMapOf<Int, Double>()
 
     override fun getItemViewType(position: Int): Int {
         if (position == 0) {
@@ -55,11 +61,6 @@ class TaskSubtasksAdapter(
     override fun getItemCount(): Int = subtasks.size + 1
 
     private fun bindTask(holder: TaskViewHolder) {
-        if (subtasks.size == 0) {
-            initTask(holder)
-        } else {
-            initTaskWithSubtasks(holder)
-        }
         holder.textViewDomain.text = task.domain
         holder.textViewTitle.text = task.title
         holder.textViewDescription.text = task.description
@@ -78,9 +79,63 @@ class TaskSubtasksAdapter(
         holder.textViewPriority.text = task.priority.value
         holder.textViewDifficulty.text = task.difficulty.value
         initTimeTracking(holder)
+
+        holder.textViewProgress.visibility = View.VISIBLE
+        holder.textViewProgress.text = task.progress.toString()
+
+        when (task.progressBarType) {
+            ProgressBarType.TYPE0 -> {
+                initTaskType0(holder)
+            }
+            ProgressBarType.TYPE1 -> {
+                initTaskType1(holder)
+                splitDifficultyType1()
+            }
+            ProgressBarType.TYPE2 -> {
+                initTaskType2(holder)
+//                splitDifficulty()
+                splitDifficultyType1()
+            }
+        }
     }
 
-    private fun initTask(holder: TaskViewHolder) {
+    private fun splitDifficultyType1() {
+        val result = 100.0 / subtasks.size
+        percentage[0] = result
+        percentage[1] = result
+        percentage[2] = result
+    }
+
+    private fun splitDifficulty() {
+        val size = subtasks.size
+
+        val hardSubtasks = subtasks.stream().filter { subtask ->
+            subtask.difficulty == Difficulty.HARD
+        }.count()
+        val mediumSubtasks = subtasks.stream().filter { subtask ->
+            subtask.difficulty == Difficulty.MEDIUM
+        }.count()
+        val easySubtasks = subtasks.stream().filter { subtask ->
+            subtask.difficulty == Difficulty.EASY
+        }.count()
+
+        val valueHard:Double
+        val valueMedium:Double
+        val valueEasy:Double
+        if (hardSubtasks > 0 && mediumSubtasks > 0 && easySubtasks > 0) {
+            valueHard = 50.0 / hardSubtasks
+            valueMedium = 30.0 / hardSubtasks
+            valueEasy = 20.0 / hardSubtasks
+        } else {
+            if (hardSubtasks > 0 && mediumSubtasks > 0) {
+                valueHard = 70.0 / hardSubtasks
+                valueMedium = 30.0 / hardSubtasks
+            }
+        }
+
+    }
+
+    private fun initTaskType0(holder: TaskViewHolder) {
         holder.progressBar.visibility = View.VISIBLE
         holder.textViewProgress.visibility = View.VISIBLE
 
@@ -97,8 +152,66 @@ class TaskSubtasksAdapter(
         }
     }
 
-    private fun initTaskWithSubtasks(holder: TaskViewHolder) {
+    private fun initTaskType1(holder: TaskViewHolder) {
+        holder.progressBarSteps.visibility = View.VISIBLE
 
+        initProgressSteps(holder)
+    }
+
+    private fun initTaskType2(holder: TaskViewHolder) {
+        holder.progressBarSteps.visibility = View.VISIBLE
+
+        initProgressLine(holder)
+    }
+
+    private fun initProgressSteps(holder: TaskViewHolder) {
+        val stepBeans = ArrayList<StepBean>()
+        for ((position, subtask) in subtasks.withIndex()) {
+            val title: Int = position + 1
+            when (subtask.status) {
+                SubtaskStatus.NEW -> {
+                    stepBeans.add(StepBean(title.toString(), -1))
+                }
+                SubtaskStatus.IN_PROGRESS -> {
+                    stepBeans.add(StepBean(title.toString(), 0))
+                }
+                SubtaskStatus.COMPLETE -> {
+                    stepBeans.add(StepBean(title.toString(), 1))
+                }
+            }
+        }
+
+        holder.progressBarSteps
+            .setStepViewTexts(stepBeans)
+            .setTextSize(12)
+            .setStepViewUnComplectedTextColor(holder.itemView.context.getColor(R.color.black))
+            .setStepViewComplectedTextColor(holder.itemView.context.getColor(R.color.black))
+            .setStepsViewIndicatorUnCompletedLineColor(holder.itemView.context.getColor(R.color.black))
+            .setStepsViewIndicatorCompletedLineColor(holder.itemView.context.getColor(R.color.black))
+            .setStepsViewIndicatorCompleteIcon(
+                AppCompatResources.getDrawable(holder.itemView.context, R.drawable.circle_done)
+            )
+            .setStepsViewIndicatorAttentionIcon(
+                AppCompatResources.getDrawable(
+                    holder.itemView.context,
+                    R.drawable.circle_in_progress
+                )
+            )
+            .setStepsViewIndicatorDefaultIcon(
+                AppCompatResources.getDrawable(
+                    holder.itemView.context,
+                    R.drawable.circle
+                )
+            )
+    }
+
+    private fun initProgressLine(holder: TaskViewHolder) {
+        holder.progressBarLine.visibility = View.VISIBLE
+
+        holder.progressBarLine.progress = task.progress
+        holder.progressBarLine.progressTintList = ColorStateList.valueOf(
+            holder.itemView.context.getColor(R.color.blue)
+        )
     }
 
     private fun initTimeTracking(holder: TaskViewHolder) {
@@ -109,8 +222,7 @@ class TaskSubtasksAdapter(
                 holder.buttonTime.setImageResource(R.drawable.ic_baseline_pause_24)
                 if (lastPause == 0L) {
                     holder.chronometer.base = SystemClock.elapsedRealtime() - task.spentTime
-                }
-                else { // resume
+                } else { // resume
                     holder.chronometer.base = holder.chronometer.base +
                             SystemClock.elapsedRealtime() - lastPause
                 }
@@ -129,20 +241,28 @@ class TaskSubtasksAdapter(
     private fun bindSubtask(holder: SubtasksViewHolder, position: Int) {
         val subtask = subtasks[position]
 
-        holder.textViewNumber.text = position.toString()
+        val number: Int = position + 1
+        holder.textViewNumber.text = number.toString()
         holder.textViewTitle.text = subtask.title
         holder.textViewDescription.text = subtask.description
+        holder.textViewDifficulty.text = subtask.difficulty.value
 
-        initButtons(holder, subtask)
-        initButtonsListeners(holder, subtask)
+        initButtons(holder, subtask, position)
+        initButtonsListeners(holder, subtask, position)
     }
 
-    private fun initButtons(holder: SubtasksViewHolder, subtask: Subtask) {
+    private fun initButtons(holder: SubtasksViewHolder, subtask: Subtask, position: Int) {
         when (subtask.status) {
             SubtaskStatus.NEW -> {
-                holder.buttonNew.isEnabled = false
-                holder.buttonInProgress.isEnabled = true
-                holder.buttonComplete.isEnabled = false
+                if (position == currentSubtask) {
+                    holder.buttonNew.isEnabled = false
+                    holder.buttonInProgress.isEnabled = true
+                    holder.buttonComplete.isEnabled = false
+                } else {
+                    holder.buttonNew.isEnabled = false
+                    holder.buttonInProgress.isEnabled = false
+                    holder.buttonComplete.isEnabled = false
+                }
 
                 holder.buttonNew.backgroundTintList = ColorStateList.valueOf(
                     holder.itemView.context.getColor(R.color.generalBlueColor)
@@ -156,9 +276,15 @@ class TaskSubtasksAdapter(
             }
 
             SubtaskStatus.IN_PROGRESS -> {
-                holder.buttonNew.isEnabled = false
-                holder.buttonInProgress.isEnabled = false
-                holder.buttonComplete.isEnabled = true
+                if (position == currentSubtask) {
+                    holder.buttonNew.isEnabled = false
+                    holder.buttonInProgress.isEnabled = false
+                    holder.buttonComplete.isEnabled = true
+                } else {
+                    holder.buttonNew.isEnabled = false
+                    holder.buttonInProgress.isEnabled = false
+                    holder.buttonComplete.isEnabled = false
+                }
 
                 holder.buttonNew.backgroundTintList = ColorStateList.valueOf(
                     holder.itemView.context.getColor(R.color.grey)
@@ -172,9 +298,15 @@ class TaskSubtasksAdapter(
             }
 
             SubtaskStatus.COMPLETE -> {
-                holder.buttonNew.isEnabled = false
-                holder.buttonInProgress.isEnabled = true
-                holder.buttonComplete.isEnabled = false
+                if (position == currentSubtask) {
+                    holder.buttonNew.isEnabled = false
+                    holder.buttonInProgress.isEnabled = false
+                    holder.buttonComplete.isEnabled = false
+                } else {
+                    holder.buttonNew.isEnabled = false
+                    holder.buttonInProgress.isEnabled = false
+                    holder.buttonComplete.isEnabled = false
+                }
 
                 holder.buttonNew.backgroundTintList = ColorStateList.valueOf(
                     holder.itemView.context.getColor(R.color.grey)
@@ -189,24 +321,68 @@ class TaskSubtasksAdapter(
         }
     }
 
-    private fun initButtonsListeners(holder: SubtasksViewHolder, subtask: Subtask) {
+    private fun initButtonsListeners(holder: SubtasksViewHolder, subtask: Subtask, position: Int) {
         holder.buttonInProgress.setOnClickListener {
             subtask.status = SubtaskStatus.IN_PROGRESS
             listener.onSubtaskStatusChange(subtask)
-            initButtons(holder, subtask)
+            initButtons(holder, subtask, position)
+            notifyItemChanged(0)
         }
 
         holder.buttonComplete.setOnClickListener {
             subtask.status = SubtaskStatus.COMPLETE
             listener.onSubtaskStatusChange(subtask)
-            initButtons(holder, subtask)
+            updatePercentage(subtask)
+            if (currentSubtask < subtasks.size - 1) {
+                currentSubtask++
+                notifyItemChanged(currentSubtask + 1)
+            }
+
+            initButtons(holder, subtask, position)
+            notifyItemChanged(0)
         }
     }
+
+    private fun updatePercentage(subtask: Subtask) {
+        when (subtask.difficulty) {
+            Difficulty.EASY -> {
+                task.progress = task.progress + (percentage[0]?.toInt() ?: 0)
+            }
+            Difficulty.MEDIUM -> {
+                task.progress = task.progress + (percentage[1]?.toInt() ?: 0)
+            }
+            Difficulty.HARD -> {
+                task.progress = task.progress + (percentage[2]?.toInt() ?: 0)
+            }
+        }
+        if (task.progress >= 95) {
+            task.progress = 100
+        }
+        listener.onTaskProgressUpdated(task.taskId, task.progress)
+    }
+
     fun setData(taskWithSubtasks: TaskWithSubtasks) {
         task = taskWithSubtasks.task
         subtasks.clear()
         subtasks.addAll(taskWithSubtasks.subtasks)
         notifyItemRangeChanged(0, subtasks.size + 1)
+        setCurrentSubtask()
+    }
+
+    private fun setCurrentSubtask() {
+        for ((position, subtask) in subtasks.withIndex()) {
+            if (subtask.status == SubtaskStatus.COMPLETE) {
+                continue
+            }
+            if (subtask.status == SubtaskStatus.IN_PROGRESS) {
+                currentSubtask = position
+                break
+            }
+            if (subtask.status == SubtaskStatus.NEW) {
+                currentSubtask = position
+                break
+            }
+        }
     }
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -214,7 +390,7 @@ class TaskSubtasksAdapter(
         val textViewTitle = binding.textViewTitle
         val textViewDomain = binding.textViewDomain
         val textViewDescription = binding.textViewDescription
-        val progressBar = binding.taskProgressBar
+        val progressBar = binding.taskProgressBarNoSubtasks
         val textViewProgress = binding.textViewProgress
         val textViewDeadline = binding.textViewDeadline
         val textViewImposedDeadline = binding.textViewImposedDeadline
@@ -223,6 +399,9 @@ class TaskSubtasksAdapter(
         val textViewDifficulty = binding.textViewDifficulty
         val chronometer = binding.chronometer
         val buttonTime = binding.buttonTime
+        val progressBarSteps = binding.progressBarSteps
+        val progressBarLine = binding.progressBarLine
+
     }
 
     inner class SubtasksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -233,6 +412,7 @@ class TaskSubtasksAdapter(
         val buttonNew = binding.buttonNew
         val buttonInProgress = binding.buttonInProgress
         val buttonComplete = binding.buttonComplete
+        val textViewDifficulty = binding.textViewDifficulty
     }
 
     companion object {
