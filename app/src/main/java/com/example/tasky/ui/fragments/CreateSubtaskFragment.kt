@@ -78,7 +78,7 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
     }
 
     override fun getTitle(): String {
-        return "Add subtask"
+        return "Split into subtasks"
     }
 
     private fun initButtons() {

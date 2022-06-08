@@ -62,7 +62,7 @@ class CreateTaskSelfDeadlineFragment : BaseFragment<FragmentCreateTaskSelfDeadli
         )
     }
 
-    override fun getTitle() = "Self-imposed deadline"
+    override fun getTitle() = "Add self-imposed deadline"
 
     private fun onCheckClicked() {
         if (binding.textInputDeadline.editText?.text?.isEmpty() == true) {

@@ -45,7 +45,8 @@ class CreateSubtaskView(context: Context) :
         subtaskNumber = numberOfSubtasks
 
         val number = subtaskNumber + 1
-        binding.textViewSubtakName.text = number.toString()
+        binding.textViewSubtakName.text =
+            binding.root.context.getString(R.string.subtask_placeholder, number)
     }
 
     private fun showDetails() {
@@ -82,15 +83,15 @@ class CreateSubtaskView(context: Context) :
         this.listener = listener
     }
 
-    fun getTextInputLayoutTitle() : TextInputLayout {
+    fun getTextInputLayoutTitle(): TextInputLayout {
         return textInputLayoutTitle
     }
 
-    fun getTextInputLayoutDescription() : TextInputLayout {
+    fun getTextInputLayoutDescription(): TextInputLayout {
         return textInputLayoutDescription
     }
 
-    fun getTextInputLayoutDifficulty() : TextInputLayout {
+    fun getTextInputLayoutDifficulty(): TextInputLayout {
         return textInputLayoutDifficulty
     }
 

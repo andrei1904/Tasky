@@ -73,4 +73,8 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.2.0"
 
     implementation 'com.github.baoyachi:StepView:1.9'
+
+    testImplementation 'org.mockito:mockito-core:2.25.0'
+    testImplementation 'org.mockito:mockito-inline:2.13.0'
+
 }
