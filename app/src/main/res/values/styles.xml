@@ -18,6 +18,11 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="task_filter_chip_style" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_background_color</item>
+        <item name="android:textColor">@color/colorWhite</item>
+    </style>
+
     <style name="task_filter_chipGroup_style" parent="Theme.MaterialComponents.Light"/>
 
 </resources>

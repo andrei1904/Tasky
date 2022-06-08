@@ -1,10 +1,10 @@
 package com.example.tasky.ui.fragments
 
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tasky.R
@@ -35,6 +35,7 @@ class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.TaskCli
             isFirstLoaded = true
             tasksAdapter = TasksAdapter(this)
             initRecyclerView()
+            initFilter()
             loadData()
         } else {
             isFirstLoaded = false
@@ -55,16 +56,11 @@ class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.TaskCli
         ))
     }
 
-    override fun getLeftIcon(): Icon? {
-        return null
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        if (isFirstLoaded) {
-
-        }
+    override fun getLeftIcon(): Icon {
+        return Icon(
+            IconType.SEARCH_ICON,
+            {}
+        )
     }
 
     private fun initRecyclerView() {
@@ -87,6 +83,22 @@ class TasksFragment : BaseFragment<FragmentTasksBinding>(), TasksAdapter.TaskCli
         )
     }
 
+    private fun initFilter() {
+        binding.filterArrow.setOnClickListener {
+            if (binding.filterChipGroup.visibility == View.GONE) {
+                binding.filterChipGroup.visibility = View.VISIBLE
+                binding.filterArrow.setImageDrawable(
+                    context?.let { it1 -> AppCompatResources.getDrawable(it1, R.drawable.ic_baseline_arrow_drop_up_24) }
+                )
+
+            } else if (binding.filterChipGroup.visibility == View.VISIBLE) {
+                binding.filterChipGroup.visibility = View.GONE
+                binding.filterArrow.setImageDrawable(
+                    context?.let { it1 -> AppCompatResources.getDrawable(it1, R.drawable.ic_baseline_arrow_drop_down_24) }
+                )
+            }
+        }
+    }
     override fun onDeleteClicked(taskId: Long, position: Int) {
         disposable.add(
             viewModel.deleteTaskById(taskId)

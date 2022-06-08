@@ -13,5 +13,6 @@ enum class IconType {
     CHECK_ICON,
     NEXT_ICON,
     BACK_ICON,
-    EDIT_ICON
+    EDIT_ICON,
+    SEARCH_ICON
 }

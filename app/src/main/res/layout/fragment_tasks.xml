@@ -14,14 +14,130 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:animateLayoutChanges="true"
+        android:layoutDirection="ltr"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/my_tasks_filter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="61dp"
+        android:background="@color/colorWhite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/filter_chipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="13dp"
+            android:theme="@style/task_filter_chipGroup_style"
+            android:visibility="gone"
+            app:chipSpacingHorizontal="13dp"
+            app:chipSpacingVertical="13dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/new_chip"
+                style="@style/task_filter_chip_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_task"
+                android:textSize="16sp"
+                app:chipCornerRadius="3dp"
+                app:chipMinHeight="40dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/in_progress_chip"
+                style="@style/task_filter_chip_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/in_progress"
+                android:textSize="16sp"
+                app:chipCornerRadius="3dp"
+                app:chipMinHeight="40dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/complete_chip"
+                style="@style/task_filter_chip_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/complete"
+                android:textSize="16sp"
+                app:chipCornerRadius="3dp"
+                app:chipMinHeight="40dp" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/overdue_chip"
+                style="@style/task_filter_chip_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/overdue"
+                android:textSize="16sp"
+                app:chipCornerRadius="3dp"
+                app:chipMinHeight="40dp" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <View
+            android:id="@+id/horizontal_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/taskDark"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/filter_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="13dp"
+            android:text="@string/filter_tasks"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filter_chipGroup" />
+
+        <ImageView
+            android:id="@+id/filter_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="26dp"
+            android:src="@drawable/ic_baseline_arrow_drop_down_24"
+            app:layout_constraintBottom_toBottomOf="@id/filter_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/filter_text"
+            android:contentDescription="@string/show_hide" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasks_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:background="@color/lightGrey"
-        android:layout_marginTop="60dp"
         android:clipToPadding="false"
         android:paddingBottom="10dp"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/my_tasks_filter"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -62,7 +62,12 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment() {
     private fun initLeftIcon() {
 
         val icon = getLeftIcon() ?: return
-        initIcon(icon, topBarBinding.imageButtonBack)
+
+        if (icon.type == IconType.BACK_ICON) {
+            initIcon(icon, topBarBinding.imageButtonBack)
+        } else {
+            initIcon(icon, topBarBinding.imageButtonSearch)
+        }
     }
 
     private fun initTitle() {

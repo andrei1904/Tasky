@@ -56,4 +56,6 @@
     <string name="complete">Complete</string>
     <string name="difficult">Difficulty</string>
     <string name="username">Username</string>
+    <string name="overdue">Overdue</string>
+    <string name="filter_tasks">Filter tasks</string>
 </resources>
