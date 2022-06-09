@@ -108,6 +108,6 @@ class TaskFragment(private val taskWithSubtasks: TaskWithSubtasks) :
     }
 
     companion object {
-        private const val TITLE = "Task Details"
+        private const val TITLE = "Task details"
     }
 }

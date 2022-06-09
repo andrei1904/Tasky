@@ -93,7 +93,6 @@ class TaskSubtasksAdapter(
             }
             ProgressBarType.TYPE2 -> {
                 initTaskType2(holder)
-//                splitDifficulty()
                 splitDifficultyType1()
             }
         }
@@ -104,35 +103,6 @@ class TaskSubtasksAdapter(
         percentage[0] = result
         percentage[1] = result
         percentage[2] = result
-    }
-
-    private fun splitDifficulty() {
-        val size = subtasks.size
-
-        val hardSubtasks = subtasks.stream().filter { subtask ->
-            subtask.difficulty == Difficulty.HARD
-        }.count()
-        val mediumSubtasks = subtasks.stream().filter { subtask ->
-            subtask.difficulty == Difficulty.MEDIUM
-        }.count()
-        val easySubtasks = subtasks.stream().filter { subtask ->
-            subtask.difficulty == Difficulty.EASY
-        }.count()
-
-        val valueHard:Double
-        val valueMedium:Double
-        val valueEasy:Double
-        if (hardSubtasks > 0 && mediumSubtasks > 0 && easySubtasks > 0) {
-            valueHard = 50.0 / hardSubtasks
-            valueMedium = 30.0 / hardSubtasks
-            valueEasy = 20.0 / hardSubtasks
-        } else {
-            if (hardSubtasks > 0 && mediumSubtasks > 0) {
-                valueHard = 70.0 / hardSubtasks
-                valueMedium = 30.0 / hardSubtasks
-            }
-        }
-
     }
 
     private fun initTaskType0(holder: TaskViewHolder) {
@@ -154,6 +124,11 @@ class TaskSubtasksAdapter(
 
     private fun initTaskType1(holder: TaskViewHolder) {
         holder.progressBarSteps.visibility = View.VISIBLE
+
+        holder.textViewProgress.text = holder.itemView.context.getString(
+            R.string.progress_percentage,
+            task.progress
+        )
 
         initProgressSteps(holder)
     }

@@ -31,13 +31,4 @@ class AppModule() {
     fun providePreferenceHelper(@ApplicationContext applicationContext: Context): PreferenceHelper {
         return PreferenceHelper(applicationContext)
     }
-//
-//    @Provides
-//    @Singleton
-//    fun provideSharedPreferences(@ApplicationContext applicationContext: Context):
-//            SharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
-
-//    @Provides
-//    @Singleton
-//    fun provideAppContext(app: Application): Context = app.applicationContext
 }
