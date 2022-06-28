@@ -33,10 +33,10 @@ class TasksRepository @Inject constructor(
         }
     }
 
-    fun getAllTasks(): Single<List<TaskWithSubtasks>> {
+    fun getAllTasks(status: String): Single<List<TaskWithSubtasks>> {
         return Single.create { emitter ->
 
-            val result = taskyApi.getAllTasks().execute()
+            val result = taskyApi.getAllTasks(status).execute()
 
             if (result.isSuccessful) {
                 val tasksWithSubtasks = result.body()

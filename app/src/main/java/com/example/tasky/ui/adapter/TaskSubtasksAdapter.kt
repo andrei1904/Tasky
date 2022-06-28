@@ -2,9 +2,11 @@ package com.example.tasky.ui.adapter
 
 import android.content.res.ColorStateList
 import android.os.SystemClock
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Chronometer
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.RecyclerView
 import com.baoyachi.stepview.bean.StepBean
@@ -21,7 +23,7 @@ import com.example.tasky.utils.DateFormater
 
 class TaskSubtasksAdapter(
     private val listener: Listener
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>(), Chronometer.OnChronometerTickListener {
 
     private lateinit var task: Task
     private val subtasks: ArrayList<Subtask> = arrayListOf()
@@ -30,6 +32,7 @@ class TaskSubtasksAdapter(
     private var isTracking = false
     private var lastPause: Long = 0
     private val percentage = mutableMapOf<Int, Double>()
+    private var currentValueChron: Long = 0
 
     override fun getItemViewType(position: Int): Int {
         if (position == 0) {
@@ -72,6 +75,7 @@ class TaskSubtasksAdapter(
             holder.textViewImposedDeadline.text =
                 DateFormater.getDateTimeFromMillis(task.imposedDeadline)
         } else {
+            holder.textViewImposedDeadline.text = ""
             holder.textViewImposedDeadlineInfo.visibility = View.GONE
             holder.textViewImposedDeadline.visibility = View.GONE
         }
@@ -114,11 +118,14 @@ class TaskSubtasksAdapter(
             R.string.progress_percentage,
             task.progress
         )
+        holder.progressBar.isEnabled = false
 
         holder.progressBar.addOnChangeListener { _, value, _ ->
-            holder.textViewProgress.text =
-                holder.itemView.context.getString(R.string.progress_percentage, value.toInt())
-            listener.onTaskProgressUpdated(task.taskId, value.toInt())
+            if (isTracking) {
+                holder.textViewProgress.text =
+                    holder.itemView.context.getString(R.string.progress_percentage, value.toInt())
+                listener.onTaskProgressUpdated(task.taskId, value.toInt())
+            }
         }
     }
 
@@ -190,10 +197,25 @@ class TaskSubtasksAdapter(
     }
 
     private fun initTimeTracking(holder: TaskViewHolder) {
-        holder.chronometer.base = SystemClock.elapsedRealtime() - task.spentTime
+        holder.chronometer.onChronometerTickListener = this
+
+        if (isTracking) {
+            holder.buttonTime.setImageResource(R.drawable.ic_baseline_pause_24)
+
+            holder.chronometer.stop()
+            holder.chronometer.base = currentValueChron
+            holder.chronometer.start()
+
+        } else {
+            holder.chronometer.base = SystemClock.elapsedRealtime() - task.spentTime
+            holder.buttonTime.setImageResource(R.drawable.ic_baseline_play_arrow_24)
+        }
+
         holder.buttonTime.setOnClickListener {
             // start time tracking
             if (!isTracking) {
+                holder.progressBar.isEnabled = true
+
                 holder.buttonTime.setImageResource(R.drawable.ic_baseline_pause_24)
                 if (lastPause == 0L) {
                     holder.chronometer.base = SystemClock.elapsedRealtime() - task.spentTime
@@ -204,6 +226,8 @@ class TaskSubtasksAdapter(
                 holder.chronometer.start()
 
             } else { // stop time tracking
+                holder.progressBar.isEnabled = false
+
                 holder.buttonTime.setImageResource(R.drawable.ic_baseline_play_arrow_24)
                 lastPause = SystemClock.elapsedRealtime()
                 holder.chronometer.stop()
@@ -298,27 +322,37 @@ class TaskSubtasksAdapter(
 
     private fun initButtonsListeners(holder: SubtasksViewHolder, subtask: Subtask, position: Int) {
         holder.buttonInProgress.setOnClickListener {
-            subtask.status = SubtaskStatus.IN_PROGRESS
-            listener.onSubtaskStatusChange(subtask)
-            initButtons(holder, subtask, position)
-            notifyItemChanged(0)
+            if (isTracking) {
+
+                subtask.status = SubtaskStatus.IN_PROGRESS
+                listener.onSubtaskStatusChange(subtask)
+                initButtons(holder, subtask, position)
+
+                notifyItemChanged(0)
+            }
         }
 
         holder.buttonComplete.setOnClickListener {
-            subtask.status = SubtaskStatus.COMPLETE
-            listener.onSubtaskStatusChange(subtask)
-            updatePercentage(subtask)
-            if (currentSubtask < subtasks.size - 1) {
-                currentSubtask++
-                notifyItemChanged(currentSubtask + 1)
-            }
+            if (isTracking) {
 
-            initButtons(holder, subtask, position)
-            notifyItemChanged(0)
+                subtask.status = SubtaskStatus.COMPLETE
+                listener.onSubtaskStatusChange(subtask)
+                updatePercentage(subtask)
+                if (currentSubtask < subtasks.size - 1) {
+                    currentSubtask++
+                    notifyItemChanged(currentSubtask + 1)
+                }
+
+                initButtons(holder, subtask, position)
+                notifyItemChanged(0)
+            }
         }
     }
 
     private fun updatePercentage(subtask: Subtask) {
+        if (!isTracking) {
+            return
+        }
         when (subtask.difficulty) {
             Difficulty.EASY -> {
                 task.progress = task.progress + (percentage[0]?.toInt() ?: 0)
@@ -377,6 +411,10 @@ class TaskSubtasksAdapter(
         val progressBarSteps = binding.progressBarSteps
         val progressBarLine = binding.progressBarLine
 
+    }
+
+    override fun onChronometerTick(chronometer: Chronometer) {
+        currentValueChron = chronometer.base
     }
 
     inner class SubtasksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

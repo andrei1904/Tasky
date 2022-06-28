@@ -1,13 +1,10 @@
 package com.example.tasky.data.remote
 
 import com.example.tasky.data.model.entities.*
-import com.example.tasky.data.model.requests.ProgressStatusRequest
+import com.example.tasky.data.model.requests.RefreshToken
 import com.example.tasky.data.model.responses.CreateUserResponse
 import com.example.tasky.data.model.responses.LoginResponse
-import com.example.tasky.data.model.responses.TaskResponse
 import com.example.tasky.di.NetworkModule
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -28,11 +25,14 @@ interface TaskyApi {
     @POST(NetworkModule.LOGOUT)
     fun logout(): Call<Boolean>
 
+    @PUT(NetworkModule.REFRESH)
+    fun refreshToken(@Body refreshToken: RefreshToken): Call<RefreshToken>
+
     @POST(NetworkModule.ADD_TASK)
     fun addTask(@Body task: Task): Call<Long>
 
     @GET(NetworkModule.GET_TASKS)
-    fun getAllTasks(): Call<List<TaskWithSubtasks>>
+    fun getAllTasks(@Path("status") status: String): Call<List<TaskWithSubtasks>>
 
     @DELETE(NetworkModule.DELETE_TASK)
     fun deleteTask(@Path("taskId") taskId: Long): Call<Boolean>

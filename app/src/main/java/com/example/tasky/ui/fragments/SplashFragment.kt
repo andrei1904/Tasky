@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.tasky.R
@@ -15,6 +16,8 @@ import com.example.tasky.ui.activites.BaseActivity
 import com.example.tasky.ui.activites.MainActivity
 import com.example.tasky.ui.viewmodels.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 @AndroidEntryPoint
 class SplashFragment : Fragment(), Animation.AnimationListener {
@@ -52,19 +55,24 @@ class SplashFragment : Fragment(), Animation.AnimationListener {
 
     override fun onAnimationEnd(p0: Animation?) {
 
-        viewModel.isUserLoggedIn().observe(viewLifecycleOwner) { isLoggedIn ->
-            if (isLoggedIn) {
-                val intent = Intent(activity, MainActivity::class.java)
-                startActivity(intent)
-                activity?.finish()
-            } else {
-                if (activity is BaseActivity) {
-                    (activity as BaseActivity).getFragmentNavigation()
-                        .replaceFragment(LoginFragment(), true)
+        viewModel.isUserLoggedIn()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { result ->
+                    if (result == true) {
+                        val intent = Intent(activity, MainActivity::class.java)
+                        startActivity(intent)
+                        activity?.finish()
+                    }
+                },
+                {
+                    if (activity is BaseActivity) {
+                        (activity as BaseActivity).getFragmentNavigation()
+                            .replaceFragment(LoginFragment(), true)
+                    }
                 }
-            }
-        }
-
+            )
     }
 
     override fun onAnimationRepeat(p0: Animation?) {

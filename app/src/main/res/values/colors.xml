@@ -52,5 +52,8 @@
     <color name="blue">#2264F4</color>
     <color name="green">#18CC55</color>
     <color name="red">#CC1838</color>
+    <color name="redLight">#4DDD425D</color>
+    <color name="greenLight">#4D63D188</color>
+
 
 </resources>

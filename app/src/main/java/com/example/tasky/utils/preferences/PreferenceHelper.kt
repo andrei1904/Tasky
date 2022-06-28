@@ -11,18 +11,20 @@ class PreferenceHelper @Inject constructor(
 ) {
     private val preferences: SharedPreferences = context.getSharedPreferences(CONTEXT_NAME, Context.MODE_PRIVATE)
 
-    fun getTokenFromPreference(): String {
-//        val ok = preferences.getString(TOKEN, )
-//        return preferences.getString(TOKEN, "") ?: ""
-        return ""
-    }
-
     fun setToken(token: String) {
         preferences[TOKEN] = token
     }
 
     fun getToken(): String {
         return preferences[TOKEN] ?: ""
+    }
+
+    fun setRefreshToken(token: String) {
+        preferences[REFRESH_TOKEN] = token
+    }
+
+    fun getRefreshToken(): String {
+        return preferences[REFRESH_TOKEN] ?: ""
     }
 
     fun setUserId(userId: Long) {
@@ -40,6 +42,7 @@ class PreferenceHelper @Inject constructor(
     companion object {
         private const val CONTEXT_NAME = "SharedPreferences"
         private const val TOKEN = "token"
+        private const val REFRESH_TOKEN = "refresh_token"
         private const val USER_ID = "user_id"
     }
 }

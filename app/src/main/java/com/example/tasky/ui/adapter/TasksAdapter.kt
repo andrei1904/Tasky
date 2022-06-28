@@ -21,6 +21,7 @@ class TasksAdapter(
 ) : RecyclerView.Adapter<TasksAdapter.TasksViewHolder>() {
 
     private var tasksList = ArrayList<TaskWithSubtasks>()
+    private var allTasks = ArrayList<TaskWithSubtasks>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         TasksViewHolder(
@@ -44,6 +45,8 @@ class TasksAdapter(
             holder.binding.textViewImposedDeadline.text =
                 DateFormater.getDateTimeFromMillis(taskWithSubtasks.task.deadline)
         } else {
+            holder.binding.textViewImposedDeadline.text = ""
+
             holder.binding.textViewImposedDeadlineInfo.visibility = View.GONE
             holder.binding.textViewImposedDeadline.visibility = View.GONE
         }
@@ -58,6 +61,8 @@ class TasksAdapter(
                 taskWithSubtasks.getNumberOfCompletedSubtasks(),
                 taskWithSubtasks.getNumberOfSubtasks()
             )
+        } else {
+            holder.binding.textViewSubtasks.text = ""
         }
 
         setProgressBar(
@@ -111,10 +116,22 @@ class TasksAdapter(
     }
 
     private fun setBackgroundColor(view: View, status: Status) {
-        if (status == Status.NEW) {
-            view.setBackgroundColor(view.context.getColor(R.color.taskBlueCard))
-        } else {
-            view.setBackgroundColor(view.context.getColor(R.color.white))
+        when (status) {
+            Status.NEW -> {
+                view.setBackgroundColor(view.context.getColor(R.color.taskBlueCard))
+            }
+
+            Status.COMPLETE -> {
+                view.setBackgroundColor(view.context.getColor(R.color.greenLight))
+            }
+
+            Status.OVERDUE -> {
+                view.setBackgroundColor(view.context.getColor(R.color.redLight))
+            }
+
+            else -> {
+                view.setBackgroundColor(view.context.getColor(R.color.white))
+            }
         }
     }
 
@@ -124,24 +141,16 @@ class TasksAdapter(
 
         dialog.findViewById<TextView>(R.id.text_view_delete)?.setOnClickListener {
             listener.onDeleteClicked(taskId, position)
-
-            Log.d("TASK TITLE + POSITION", "$taskId  $position")
             dialog.dismiss()
-        }
-
-        dialog.findViewById<TextView>(R.id.text_view_edit)?.setOnClickListener {
-            // EDIT TASK
         }
 
         dialog.show()
     }
 
-    fun appendToTasksList(tasks: List<TaskWithSubtasks>) {
-        tasksList.addAll(tasks)
-    }
-
     fun setTasksList(tasks: List<TaskWithSubtasks>) {
         tasksList.clear()
+        allTasks.clear()
+        allTasks.addAll(tasks)
         tasksList.addAll(tasks)
         notifyItemRangeChanged(0, tasksList.size)
     }
@@ -151,6 +160,22 @@ class TasksAdapter(
         Log.d("position", position.toString())
         notifyItemRemoved(position)
         notifyItemChanged(position, tasksList.size)
+    }
+
+    fun clearList() {
+        val size = tasksList.size
+        tasksList.clear()
+        notifyItemRangeRemoved(0, size)
+    }
+
+    fun getTasksList(): ArrayList<TaskWithSubtasks> {
+        return allTasks
+    }
+
+    fun setFilteredTasks(tasksWithSubtasks: List<TaskWithSubtasks>) {
+        tasksList.clear()
+        tasksList.addAll(tasksWithSubtasks)
+        notifyDataSetChanged()
     }
 
     class TasksViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

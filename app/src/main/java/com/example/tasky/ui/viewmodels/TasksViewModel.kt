@@ -17,8 +17,18 @@ class TasksViewModel @Inject constructor(
     private val tasksRepository: TasksRepository
 ) : ViewModel() {
 
-    fun getAllTasks(): Single<List<TaskWithSubtasks>> {
-        return tasksRepository.getAllTasks()
+    private var currentPosition = 0
+
+    fun getCurrentPosition(): Int {
+        return currentPosition
+    }
+
+    fun setCurrentPosition(pos: Int) {
+        currentPosition = pos
+    }
+
+    fun getAllTasks(status: String): Single<List<TaskWithSubtasks>> {
+        return tasksRepository.getAllTasks(status)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
     }

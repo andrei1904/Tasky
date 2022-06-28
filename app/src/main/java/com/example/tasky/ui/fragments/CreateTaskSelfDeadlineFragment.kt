@@ -74,11 +74,11 @@ class CreateTaskSelfDeadlineFragment : BaseFragment<FragmentCreateTaskSelfDeadli
 
     private fun initButtons() {
 
-        initOnYesClciked()
-        initOnNoClciked()
+        initOnYesClicked()
+        initOnNoClicked()
     }
 
-    private fun initOnYesClciked() {
+    private fun initOnYesClicked() {
         binding.buttonYes.setOnClickListener {
             hideMessage()
             addRightIcons()
@@ -101,7 +101,7 @@ class CreateTaskSelfDeadlineFragment : BaseFragment<FragmentCreateTaskSelfDeadli
         binding.textInputDeadline.visibility = View.VISIBLE
     }
 
-    private fun initOnNoClciked() {
+    private fun initOnNoClicked() {
         binding.buttonNo.setOnClickListener {
             context?.let { AlertDialog.Builder(it) }
                 ?.setTitle("Add task")
@@ -121,7 +121,11 @@ class CreateTaskSelfDeadlineFragment : BaseFragment<FragmentCreateTaskSelfDeadli
 
         editText.inputType = InputType.TYPE_NULL
         editText.keyListener = null
-
+        editText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                editText.callOnClick()
+            }
+        }
         editText.setOnClickListener {
             CalendarManager().openDatePickerDialog(editText, requireContext())
         }

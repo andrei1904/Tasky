@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -19,6 +20,7 @@ import com.example.tasky.ui.viewmodels.CreateTaskViewModel
 import com.example.tasky.utils.CalendarManager
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class CreateTaskFragment : ValidatorFragment<FragmentCreateTaskBinding>() {
@@ -100,7 +102,11 @@ class CreateTaskFragment : ValidatorFragment<FragmentCreateTaskBinding>() {
 
         editText.inputType = InputType.TYPE_NULL
         editText.keyListener = null
-
+        editText.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                editText.callOnClick()
+            }
+        }
         editText.setOnClickListener {
             CalendarManager().openDatePickerDialog(editText, requireContext())
         }

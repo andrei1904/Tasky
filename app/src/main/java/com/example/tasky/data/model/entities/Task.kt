@@ -1,6 +1,7 @@
 package com.example.tasky.data.model.entities
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.example.tasky.data.model.enums.Difficulty
 import com.example.tasky.data.model.enums.Priority
@@ -22,5 +23,4 @@ data class Task(
     var spentTime: Long = 0,
     var difficulty: Difficulty = Difficulty.EASY,
     var progressBarType: ProgressBarType = ProgressBarType.TYPE1
-) {
-}
+)

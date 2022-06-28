@@ -1,10 +1,9 @@
 package com.example.tasky.data.repositories
 
 import com.example.tasky.data.model.entities.Account
-import com.example.tasky.data.model.entities.UserWIthTasks
+import com.example.tasky.data.model.requests.RefreshToken
 import com.example.tasky.data.remote.TaskyApi
 import com.example.tasky.utils.preferences.PreferenceHelper
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
 
@@ -12,66 +11,6 @@ class LoginRepository @Inject constructor(
     private val taskyApi: TaskyApi,
     private val preferenceHelper: PreferenceHelper
 ) {
-
-//    fun signIn(account: Account): Single<Boolean> {
-//
-//        return Single.create { emitter ->
-//            firebaseAuth.signInWithEmailAndPassword(
-//                account.username.trim(),
-//                account.password.trim()
-//            )
-//                .addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        emitter.onSuccess(true)
-//                    } else {
-//                        emitter.onError(task.exception ?: Exception("Failed to login"))
-//                    }
-//                }
-//        }
-//    }
-
-//    fun signUp(account: Account): Single<Boolean> {
-//
-//        return Single.create { emitter ->
-//            firebaseAuth.createUserWithEmailAndPassword(
-//                account.username.trim(),
-//                account.password.trim()
-//            )
-//                .addOnCompleteListener { task ->
-//                    if (task.isSuccessful) {
-//                        emitter.onSuccess(true)
-//                    } else {
-//                        emitter.onError(task.exception ?: Exception("Failed to create account"))
-//                    }
-//                }
-//        }
-//    }
-
-//    fun isUserLoggedIn(): Single<Boolean> {
-//
-//        return Single.create { emitter ->
-//            val user = firebaseAuth.currentUser
-//
-//            if (user != null) {
-//                emitter.onSuccess(true)
-//            } else {
-//                emitter.onSuccess(false);
-//            }
-//        }
-//
-//    }
-
-//    fun signOut() {
-//        firebaseAuth.signOut()
-//    }
-//
-//    fun isLoggedIn(): Boolean {
-//        firebaseAuth.currentUser?.run {
-//            return true
-//        } ?: kotlin.run {
-//            return false
-//        }
-//    }
 
     fun createUser(account: Account): Single<Boolean> {
         return Single.create { emitter ->
@@ -95,6 +34,7 @@ class LoginRepository @Inject constructor(
             } else {
                 preferenceHelper.setToken(response.accessToken)
                 preferenceHelper.setUserId(response.user.id)
+                preferenceHelper.setRefreshToken(response.refreshToken)
                 emitter.onSuccess(true)
             }
         }
@@ -105,12 +45,33 @@ class LoginRepository @Inject constructor(
             val response = taskyApi.logout().execute().body()
 
             if (response == null) {
-                emitter.onError(Exception("Failed to login"))
+                emitter.onError(Exception("Failed to logout"))
             } else {
                 if (response) {
+                    preferenceHelper.clearAll()
                     emitter.onSuccess(true)
                 } else {
                     emitter.onError(Exception("Failed"))
+                }
+            }
+        }
+    }
+
+    fun isLoggedIn(): Single<Boolean> {
+        return Single.create { emitter ->
+            if (preferenceHelper.getToken() == "") {
+                emitter.onError(Exception("Not logged in"))
+            } else {
+                val response = taskyApi.refreshToken(
+                    RefreshToken(preferenceHelper.getToken(), preferenceHelper.getRefreshToken())
+                ).execute().body()
+
+                if (response == null) {
+                    emitter.onError(Exception("Failed"))
+                } else {
+                    preferenceHelper.setToken(response.accessToken)
+                    preferenceHelper.setRefreshToken(response.refreshToken)
+                    emitter.onSuccess(true)
                 }
             }
         }

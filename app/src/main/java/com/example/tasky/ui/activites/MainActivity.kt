@@ -41,7 +41,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    fun onBackPressTask() {
+        binding.bottomNavigation.selectedItemId = R.id.page_tasks
     }
 }

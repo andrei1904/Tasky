@@ -5,15 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tasky.data.model.entities.Icon
 import com.example.tasky.data.model.entities.IconType
 import com.example.tasky.data.model.entities.Subtask
 import com.example.tasky.data.model.entities.TaskWithSubtasks
-import com.example.tasky.data.model.enums.SubtaskStatus
 import com.example.tasky.databinding.FragmentTaskBinding
 import com.example.tasky.ui.activites.BaseActivity
+import com.example.tasky.ui.activites.MainActivity
 import com.example.tasky.ui.adapter.TaskSubtasksAdapter
 import com.example.tasky.ui.viewmodels.TasksViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,6 +33,7 @@ class TaskFragment(private val taskWithSubtasks: TaskWithSubtasks) :
         if (rootView == null) {
             rootView = viewBinding!!.root
             isFirstLoaded = true
+            onBackPressListener()
         } else {
             isFirstLoaded = false
         }
@@ -105,6 +107,12 @@ class TaskFragment(private val taskWithSubtasks: TaskWithSubtasks) :
             }, { throwable ->
                 Toast.makeText(context, throwable.message, Toast.LENGTH_SHORT).show()
             })
+    }
+
+    private fun onBackPressListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            (activity as MainActivity).onBackPressTask()
+        }
     }
 
     companion object {
