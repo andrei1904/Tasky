@@ -1,11 +1,9 @@
 package com.example.tasky.data.repositories
 
-import android.content.SharedPreferences
 import com.example.tasky.data.model.entities.UserDetails
 import com.example.tasky.data.remote.TaskyApi
 import com.example.tasky.utils.preferences.PreferenceHelper
 import io.reactivex.rxjava3.core.Single
-import java.lang.Exception
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(

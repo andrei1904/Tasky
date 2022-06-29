@@ -54,10 +54,6 @@ class TasksRepository @Inject constructor(
         }
     }
 
-    fun createSubtasks(subtasks: ArrayList<Subtask>) {
-        appDatabase.TaskDao().insertSubtasks(subtasks)
-    }
-
     fun addTask(task: Task): Single<Long> {
         return Single.create { emitter ->
 
