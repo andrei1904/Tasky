@@ -43,7 +43,7 @@ class TasksAdapter(
             holder.binding.textViewImposedDeadline.visibility = View.VISIBLE
 
             holder.binding.textViewImposedDeadline.text =
-                DateFormater.getDateTimeFromMillis(taskWithSubtasks.task.deadline)
+                DateFormater.getDateTimeFromMillis(taskWithSubtasks.task.imposedDeadline)
         } else {
             holder.binding.textViewImposedDeadline.text = ""
 

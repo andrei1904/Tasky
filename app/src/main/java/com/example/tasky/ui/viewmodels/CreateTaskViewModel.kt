@@ -104,6 +104,8 @@ class CreateTaskViewModel @Inject constructor(
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(Schedulers.io())
                                 .subscribe({
+                                    subtasks.clear()
+                                    completedFieldsForSubtasks.clear()
                                     emitter.onSuccess(true)
                                 }, {
                                     throwable ->
