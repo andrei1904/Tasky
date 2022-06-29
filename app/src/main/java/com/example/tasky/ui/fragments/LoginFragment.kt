@@ -107,12 +107,6 @@ class LoginFragment : Fragment() {
 
         editText.addTextChangedListener { editable ->
             val value = editable.toString()
-
-            if (value.isEmpty()) {
-                textInputLayout.error = "Add " + textInputLayout.hint
-            } else {
-                textInputLayout.isErrorEnabled = false
-            }
             viewModel.setLoginField(value, field)
         }
     }

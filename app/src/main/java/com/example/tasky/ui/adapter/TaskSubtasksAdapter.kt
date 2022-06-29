@@ -2,7 +2,6 @@ package com.example.tasky.ui.adapter
 
 import android.content.res.ColorStateList
 import android.os.SystemClock
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -99,6 +98,9 @@ class TaskSubtasksAdapter(
                 initTaskType2(holder)
                 splitDifficultyType1()
             }
+            else -> {
+                return
+            }
         }
     }
 
@@ -142,6 +144,11 @@ class TaskSubtasksAdapter(
 
     private fun initTaskType2(holder: TaskViewHolder) {
         holder.progressBarSteps.visibility = View.VISIBLE
+
+        holder.textViewProgress.text = holder.itemView.context.getString(
+            R.string.progress_percentage,
+            task.progress
+        )
 
         initProgressLine(holder)
     }
@@ -232,6 +239,7 @@ class TaskSubtasksAdapter(
                 lastPause = SystemClock.elapsedRealtime()
                 holder.chronometer.stop()
                 listener.onStopTimeClicked(task.taskId, (holder.chronometer.base - lastPause) * -1)
+                task.spentTime = (holder.chronometer.base - lastPause) * -1
             }
             isTracking = !isTracking
         }

@@ -16,6 +16,7 @@ import com.example.tasky.data.model.enums.Difficulty
 import com.example.tasky.data.model.enums.Priority
 import com.example.tasky.databinding.FragmentCreateTaskBinding
 import com.example.tasky.ui.activites.BaseActivity
+import com.example.tasky.ui.activites.MainActivity
 import com.example.tasky.ui.viewmodels.CreateTaskViewModel
 import com.example.tasky.utils.CalendarManager
 import com.google.android.material.textfield.TextInputLayout
@@ -62,7 +63,7 @@ class CreateTaskFragment : ValidatorFragment<FragmentCreateTaskBinding>() {
         return Icon(
             IconType.BACK_ICON,
             {
-                (activity as BaseActivity).getFragmentNavigation().popBackStack()
+                (activity as MainActivity).onBackPressTask()
             }
         )
     }

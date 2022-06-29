@@ -13,7 +13,6 @@ import com.example.tasky.data.model.entities.IconType
 import com.example.tasky.data.model.entities.Subtask
 import com.example.tasky.data.model.entities.TaskWithSubtasks
 import com.example.tasky.databinding.FragmentTaskBinding
-import com.example.tasky.ui.activites.BaseActivity
 import com.example.tasky.ui.activites.MainActivity
 import com.example.tasky.ui.adapter.TaskSubtasksAdapter
 import com.example.tasky.ui.viewmodels.TasksViewModel
@@ -48,19 +47,14 @@ class TaskFragment(private val taskWithSubtasks: TaskWithSubtasks) :
     }
 
     override fun getRightIcons(): List<Icon?> {
-        return listOf(Icon(
-            IconType.BACK_ICON,
-            {
-                (activity as BaseActivity).getFragmentNavigation().popBackStack()
-            }
-        ))
+        return listOf()
     }
 
     override fun getLeftIcon(): Icon {
         return Icon(
             IconType.BACK_ICON,
             {
-                (activity as BaseActivity).getFragmentNavigation().popBackStack()
+                (activity as MainActivity).onBackPressTask()
             }
         )
     }
