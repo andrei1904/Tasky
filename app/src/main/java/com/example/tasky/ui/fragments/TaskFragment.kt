@@ -80,9 +80,7 @@ class TaskFragment(private val taskWithSubtasks: TaskWithSubtasks) :
         viewModel.updateProgress(taskId, progress)
             .subscribe({
 
-            }, { throwable ->
-                Toast.makeText(context, throwable.message, Toast.LENGTH_SHORT).show()
-            })
+            }, {})
     }
 
     override fun onStopTimeClicked(taskId: Long, spentTime: Long) {

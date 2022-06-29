@@ -190,73 +190,6 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
         )
     }
 
-//    private fun addValidationListeners(subtaskPosition: Int) {
-//        addValidationListener(
-//            subtaskViewList[subtaskPosition].getTextInputLayoutTitle(),
-//            viewModel.values.TITLE_VALUE,
-//            subtaskPosition
-//        )
-//        addValidationListener(
-//            subtaskViewList[subtaskPosition].getTextInputLayoutDescription(),
-//            viewModel.values.DESCRIPTION_VALUE,
-//            subtaskPosition
-//        )
-//        addValidationListener(
-//            subtaskViewList[subtaskPosition].getTextInputLayoutDifficulty(),
-//            viewModel.values.DIFFICULTY_VALUE,
-//            subtaskPosition
-//        )
-//    }
-
-//    private fun addValidationListener(
-//        textInputLayout: TextInputLayout,
-//        field: String,
-//        subtaskNumber: Int
-//    ) {
-//        val editText = textInputLayout.editText ?: return
-//
-//        subtaskTextWatcher[field]?.add(
-//            editText.addTextChangedListener { editable ->
-//                val value = editable.toString()
-//
-//                if (value.isEmpty()) {
-//                    textInputLayout.error = "Add " + textInputLayout.hint
-//                } else {
-//                    textInputLayout.isErrorEnabled = false
-//                }
-//                viewModel.setSubtaskField(value, field, subtaskNumber)
-//            })
-//    }
-
-//    private fun removeValidationListeners(subtaskPosition: Int) {
-//        removeValidationListener(
-//            subtaskViewList[subtaskPosition].getTextInputLayoutTitle(),
-//            viewModel.values.TITLE_VALUE,
-//            subtaskPosition
-//        )
-//        removeValidationListener(
-//            subtaskViewList[subtaskPosition].getTextInputLayoutTitle(),
-//            viewModel.values.DESCRIPTION_VALUE,
-//            subtaskPosition
-//        )
-//        removeValidationListener(
-//            subtaskViewList[subtaskPosition].getTextInputLayoutDifficulty(),
-//            viewModel.values.DIFFICULTY_VALUE,
-//            subtaskPosition
-//        )
-//    }
-
-//    private fun removeValidationListener(
-//        textInputLayout: TextInputLayout,
-//        field: String,
-//        subtaskNumber: Int
-//    ) {
-//        val editText = textInputLayout.editText ?: return
-//
-//        val textWatcher = subtaskTextWatcher[field]?.get(subtaskNumber)
-//        editText.removeTextChangedListener(textWatcher)
-//    }
-
     private fun setFields() {
         for (i in 0 until numberOfSubtasks) {
             if (subtaskViewList[i].getTextInputLayoutTitle().editText?.text.toString()
@@ -334,15 +267,6 @@ class CreateSubtaskFragment : BaseFragment<FragmentCreateSubtasksBinding>(),
     }
 
     override fun onRemoveClicked(subtaskPosition: Int) {
-//        removeValidationListeners(subtaskPosition)
-//
-//        var position = subtaskPosition + 1
-//        while (position < numberOfSubtasks) {
-//            removeValidationListeners(position)
-//            addValidationListeners(position - 1)
-//            position += 1
-//        }
-
         binding.constraintLayout.removeView(subtaskViewList[subtaskPosition])
         subtaskViewList.removeAt(subtaskPosition)
         viewModel.removeSubtask(subtaskPosition)

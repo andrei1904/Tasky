@@ -169,10 +169,6 @@ class CreateTaskViewModel @Inject constructor(
         }
     }
 
-    fun setCompletedField(i: Int, value: String) {
-        completedFieldsForSubtasks[i].add(value)
-    }
-
     companion object {
         const val DOMAIN_VALUE = "domain"
         const val TITLE_VALUE = "title"
